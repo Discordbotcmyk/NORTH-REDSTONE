@@ -1,0 +1,229 @@
+{
+  "changelogs": [
+    {
+      "id": "log-1-2-4",
+      "title": "1.2.4 UPDATE",
+      "date": "2026-08-19",
+      "bullets": [
+        "Added New Handcuff System",
+        "Added New Hud - Money System",
+        "Added New Admin System - Staff Only",
+        "Added New Escape Path by Medium",
+        "Added Data Saving",
+        "Revamped Main Menu",
+        "Revamped Workshop",
+        "Removed All Supermax Script and Working Assets",
+        "Fixed Taser Flying Glitch",
+        "Fixed Max Doors Having No Collision",
+        "Fixed Medium Seats",
+        "Fixed Cafe Doors Not Opening",
+        "Fix Broken Seats",
+        "And many more!"
+      ],
+      "note": ""
+    },
+    {
+      "id": "log-1-2-3",
+      "title": "1.2.3 UPDATE",
+      "date": "2026-08-10",
+      "bullets": [
+        "Moved Maximum Security.",
+        "Moved Minimum Security.",
+        "Added Medium Security.",
+        "Changed Booking to refresh player.",
+        "Added new CERT.",
+        "Added new Riot Control.",
+        "Added new upstairs.",
+        "Added doors on shower block.",
+        "Added new anti cheat.",
+        "Fixed all Animations for firearms."
+      ],
+      "note": ""
+    },
+    {
+      "id": "log-1-2-2",
+      "title": "1.2.2 UPDATE",
+      "date": "2026-08-02",
+      "bullets": [
+        "Added fall map early.",
+        "Added new team list",
+        "Added door on the shower block.",
+        "Added hold down animation for all guns.",
+        "Fixed Handcuff breaking [Again].",
+        "Fixed floating lights.",
+        "Fixed Overscale Roofs clipping.",
+        "Fixed Door closing at the wrong schedule.",
+        "Fixed Admin System - Staff Only",
+        "Fixed broken Glock animation."
+      ],
+      "note": ""
+    },
+    {
+      "id": "log-1-2-1",
+      "title": "1.2.1 UPDATE",
+      "date": "2026-07-31",
+      "bullets": [
+        "Sheriff Office can now teleport to the prison.",
+        "Added a Construction Area by Maximum Security.",
+        "Dropped Items now require a prompt to pickup."
+      ],
+      "note": ""
+    },
+    {
+      "id": "log-change-bugfix",
+      "title": "CHANGE LOGS & BUG FIXES",
+      "date": "2026-07-31",
+      "bullets": [
+        "Fixed handcuffs not cuffing.",
+        "Fixed movement and Cuffing.",
+        "Fixed all team barriers. All Inmate, Escapee and sheriff's office can now pass.",
+        "Removed from players joining on phone/tablet. Not Ready.",
+        "Improved window escape. Faster Escape.",
+        "Fixed broken/unanchored parts.",
+        "Removed Super Maximum Security. Not up to our standards.",
+        "Fixed Visible Prompt Parts. Now Invisible.",
+        "Fixed Firearm Sounds. No more hearing gunshots, slide backs on other side of the map.",
+        "Improved Alarm. Inmates can't use alarm anymore.",
+        "Removed Super Maximum Security From booking.",
+        "Removed Super Maximum Security Team.",
+        "Fixed Booking System.",
+        "Removed Broken Firearms.",
+        "Removed Old Basement.",
+        "Removed Old Surveillance Room.",
+        "Fixed Clipping Avatars.",
+        "Banned Abusing Emotes.",
+        "Removed Super Maximum Security Spawns.",
+        "Banned Non game Gear.",
+        "Added Anti Cheat.",
+        "Removed Solitary Confinement Team"
+      ],
+      "note": ""
+    }
+  ],
+  "guidelines": {
+    "game": [
+      {
+        "title": "Unfair Gameplay.",
+        "description": "Any form of unfair gameplay will not be tolerated within the game North Redstone County Jail. Violating this role result in a moderation action"
+      },
+      {
+        "title": "Glitching.",
+        "description": "Any form of glitching is strictly prohibited even for good glitching. If a player is caught glitching, or abusing a glitch they could be moderated."
+      },
+      {
+        "title": "Bug Abuse.",
+        "description": "Any form of bug abuse will result in immediate 3-day ban or further moderation action depending on the severity. Bug abuse is strictly prohibited even to cause chaos."
+      },
+      {
+        "title": "Respawning to avoid arrest/cuffs.",
+        "description": "Respawning to avoid arrest/cuffs is strictly prohibited at any point of time. Violating this rule could result in moderation action."
+      },
+      {
+        "title": "Cheating/Exploits.",
+        "description": "Anytime playing North Redstone Community, you are not to use exploits/cheats to gain an unfair advantage as this is strictly prohibited and will result in an immediate permanent ban until appeal."
+      },
+      {
+        "title": "Chat Spamming/Flooding Radio.",
+        "description": "Any form of chat spamming or flooding chats, this includes radio or any form of communication, will result in a moderation action."
+      },
+      {
+        "title": "Abuse of Vote Kick.",
+        "description": "Any form of abusing vote kick will result in a moderation action. Vote kick is a tool to get rid of rule breakers, not to be abused."
+      },
+      {
+        "title": "Scamming.",
+        "description": "Any form of scamming players of North Redstone County Jail will result in an immediate permanent ban from our game as scamming violates Roblox terms of service and NRC TOS."
+      },
+      {
+        "title": "Leaving to avoid moderation action.",
+        "description": "At any time if a moderator is trying to resolve a problem with you, you are not to leave during a moderation action as that will be seen as evading moderation. This will result in a permanent ban until appeal has been approved."
+      },
+      {
+        "title": "Duping.",
+        "description": "North Redstone County Jail prohibits duping of guns, shivs, keycards, etc. Anyone caught duping will face moderation action."
+      },
+      {
+        "title": "Roblox TOS.",
+        "description": "Please follow Roblox terms of service at all times. If caught breaking Roblox TOS, you will be banned from North Redstone County Jail and your account will be reported to Roblox."
+      },
+      {
+        "title": "North Redstone TOS [Terms of Service].",
+        "description": "You are not to violate the terms of service of North Redstone Community or North Redstone County Jail. If caught, you will face moderation action."
+      },
+      {
+        "title": "Staff Impersonation.",
+        "description": "You are not to impersonate moderators, developers, or ownership members. If caught impersonating, you will be banned or face other moderation."
+      },
+      {
+        "title": "Usage of map stealers.",
+        "description": "You are not to use a map stealer to take the map of North Redstone County Jail. If caught stealing our map you will be banned permanently and a DMCA will be filed."
+      }
+    ],
+    "discord": [
+      {
+        "title": "Respect.",
+        "description": "At any time you should respect any members of the North Redstone Community. Failure to abide by this rule may result in moderation."
+      },
+      {
+        "title": "Spamming.",
+        "description": "You are not to spam in any channels within North Redstone Community, including off topic, commands, or in-game pictures. Failure to abide by this rule may result in moderation."
+      },
+      {
+        "title": "Usage of Racial Slurs.",
+        "description": "You are prohibited from using racial slurs regardless of race, as this is a form of harassment. It will not be tolerated within the community. Failure to abide by this rule may result in moderation action."
+      },
+      {
+        "title": "Harassment.",
+        "description": "You are not to harass other members about their appearance, speech impediments, or other disabilities. This is strictly prohibited and will result in moderation."
+      },
+      {
+        "title": "NSFW.",
+        "description": "You are not to post 18+ material/NSFW content. This is strictly prohibited and if caught you will be immediately banned from the community without the chance of appeal."
+      },
+      {
+        "title": "Alt Accounts/Bypassing Moderation Actions.",
+        "description": "You are not to use alt accounts to bypass moderation action. The only time you may use an alt account is if your account was compromised or deleted. Otherwise alt accounts are extremely prohibited and could lead to moderation action if found bypassing moderation."
+      },
+      {
+        "title": "Ear Rape/Obnoxious sounds.",
+        "description": "You are not to ear rape any member inside of a voice call. This is strictly prohibited and a moderator may server mute you with further moderation actions."
+      },
+      {
+        "title": "Pinging NRC Officials.",
+        "description": "You are not to ping North Redstone Community officials unless there is a rule breaker and you need an immediate response. Otherwise pinging moderators, developers, or ownership will result in you possibly being banned, softbanned/kicked, or muted."
+      },
+      {
+        "title": "Spam Joining Voice Calls.",
+        "description": "You are not to spam join voice calls over and over again. If caught you may receive a mute or further moderation action."
+      },
+      {
+        "title": "Wasting Moderation Time.",
+        "description": "You are not to waste our moderators' time for non-moderation needs. Moderators are here to strictly help and protect the community from rule breakers. If caught abusing our systems you will be banned from the community, possibly without the chance of appeal."
+      },
+      {
+        "title": "Self Harm.",
+        "description": "Self harm is strictly prohibited and will not be tolerated, as we want to ensure the safety of our members. If caught, moderation action will happen and the authorities will be contacted."
+      },
+      {
+        "title": "Discord TOS [Terms Of Service].",
+        "description": "Breaking Discord TOS is prohibited within North Redstone Community and will lead to a permanent ban with no appeal. Any account that violates Discord Terms of Service will be reported."
+      },
+      {
+        "title": "North Redstone TOS [Terms of Service].",
+        "description": "You are not to violate the terms of service of North Redstone Community. If caught you will face moderation action."
+      },
+      {
+        "title": "Encouraging members to break rules.",
+        "description": "You are not to encourage other members to break rules on your behalf. If caught, you will face moderation action worse than the other member."
+      },
+      {
+        "title": "Attempt to Raid.",
+        "description": "Any attempt to raid North Redstone Community will result in a permanent blacklist from our community and Discord Trust & Safety will be notified of your actions."
+      },
+      {
+        "title": "Staff Impersonation.",
+        "description": "You are not to impersonate moderators, developers, or ownership members. If caught impersonating, you will be banned or face other moderation."
+      }
+    ]
+  }
+}

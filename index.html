@@ -1,0 +1,1240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>North Redstone Community</title>
+    <style>
+        :root {
+            --bg-dark: #121212;
+            --bg-card: #1e1e1e;
+            --bg-card-hover: #282828;
+            --accent-orange: #ff6b00;
+            --accent-yellow: #ffb700;
+            --text-white: #ffffff;
+            --text-gray: #a0a0a0;
+            --border-color: #333333;
+            --discord-blurple: #5865F2;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-white);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        header {
+            background-color: rgba(18, 18, 18, 0.98);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 2px solid var(--accent-orange);
+        }
+
+        nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            padding: 1rem 2rem;
+            flex-wrap: wrap;
+            gap: 0.75rem 1.5rem;
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 2.5rem;
+            flex-wrap: wrap;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+        }
+
+        .logo-container img {
+            height: 45px;
+            width: auto;
+        }
+
+        .logo-text {
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: var(--text-white);
+            letter-spacing: 1px;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 1.5rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .nav-links a {
+            color: var(--text-gray);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: color 0.3s;
+            cursor: pointer;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            color: var(--accent-yellow);
+        }
+
+        .btn-play {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--accent-orange), var(--accent-yellow));
+            color: #000 !important;
+            padding: 0.7rem 1.6rem;
+            border-radius: 6px;
+            font-weight: 800 !important;
+            text-transform: uppercase;
+            box-shadow: 0 4px 15px rgba(255, 107, 0, 0.3);
+            transition: transform 0.2s, box-shadow 0.2s !important;
+            text-decoration: none;
+        }
+
+        .btn-play:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 107, 0, 0.5);
+        }
+
+        .account-area {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-left: auto;
+            flex-shrink: 0;
+        }
+
+        .btn-discord-login {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            background-color: var(--discord-blurple);
+            color: #fff !important;
+            padding: 0.55rem 1.2rem;
+            border-radius: 6px;
+            font-weight: 700 !important;
+            font-size: 0.9rem;
+            text-decoration: none;
+            transition: filter 0.2s, transform 0.2s;
+        }
+
+        .btn-discord-login:hover {
+            filter: brightness(1.1);
+            transform: translateY(-1px);
+        }
+
+        .btn-discord-login svg {
+            width: 18px;
+            height: 18px;
+            fill: #fff;
+            flex-shrink: 0;
+        }
+
+        .welcome-text {
+            font-weight: 700;
+            font-size: 0.9rem;
+            color: var(--text-white);
+        }
+
+        .welcome-text span {
+            color: var(--accent-yellow);
+        }
+
+        .btn-logout {
+            color: var(--text-gray) !important;
+            font-size: 0.8rem !important;
+            font-weight: 600 !important;
+            text-decoration: underline;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+            flex: 1;
+            width: 100%;
+        }
+
+        .page-section {
+            display: none;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .page-section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .hero {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: center;
+            margin-top: 1rem;
+        }
+
+        .hero-title {
+            font-size: 3.5rem;
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 1.2rem;
+        }
+
+        .hero-title span {
+            color: var(--accent-orange);
+            background: linear-gradient(45deg, var(--accent-orange), var(--accent-yellow));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-desc {
+            color: var(--text-gray);
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 2rem;
+        }
+
+        .hero-banner {
+            width: 100%;
+            border-radius: 12px;
+            border: 2px solid var(--accent-orange);
+            box-shadow: 0 8px 25px rgba(255, 107, 0, 0.2);
+            object-fit: cover;
+            max-height: 380px;
+        }
+
+        .feature-gallery {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .feature-gallery img {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            transition: transform 0.3s, border-color 0.3s;
+        }
+
+        .feature-gallery img:hover {
+            transform: scale(1.03);
+            border-color: var(--accent-yellow);
+        }
+
+        .notice-box {
+            background-color: var(--bg-card);
+            border-left: 4px solid var(--accent-yellow);
+            padding: 1rem 1.5rem;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            font-size: 0.95rem;
+        }
+
+        .notice-icon {
+            font-size: 1.5rem;
+            color: var(--accent-yellow);
+        }
+
+        .dmca-box {
+            background-color: rgba(217, 4, 41, 0.15);
+            border: 1px solid #d90429;
+            border-left: 6px solid #d90429;
+            padding: 1.2rem;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .dmca-box img {
+            height: 50px;
+            width: auto;
+        }
+
+        .dmca-text {
+            color: #ff8fa3;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        .filter-container {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            margin-bottom: 2rem;
+            background: var(--bg-card);
+            padding: 1rem;
+            border-radius: 8px;
+        }
+
+        .filter-container select {
+            background: var(--bg-dark);
+            color: var(--text-white);
+            border: 1px solid var(--border-color);
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            outline: none;
+        }
+
+        .changelog-header {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .changelog-header img {
+            height: 70px;
+        }
+
+        .log-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .log-title-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 0.8rem;
+            margin-bottom: 1rem;
+        }
+
+        .log-title {
+            color: var(--accent-orange);
+            font-size: 1.3rem;
+            font-weight: 700;
+        }
+
+        .log-date {
+            color: var(--accent-yellow);
+            font-size: 0.9rem;
+            font-weight: 600;
+            background: rgba(255, 183, 0, 0.1);
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+        }
+
+        .log-content ul {
+            list-style: none;
+            display: grid;
+            gap: 0.5rem;
+        }
+
+        .log-content li {
+            position: relative;
+            padding-left: 1.5rem;
+            color: #d1d1d1;
+        }
+
+        .log-content li::before {
+            content: "•";
+            color: var(--accent-orange);
+            font-weight: bold;
+            font-size: 1.2rem;
+            position: absolute;
+            left: 0;
+            top: -2px;
+        }
+
+        .log-note {
+            margin-top: 1rem;
+            background: rgba(255, 183, 0, 0.08);
+            border-left: 3px solid var(--accent-yellow);
+            padding: 0.7rem 1rem;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            color: #e8d8b8;
+        }
+
+        .log-admin-controls {
+            margin-top: 1.2rem;
+            padding-top: 1rem;
+            border-top: 1px dashed var(--border-color);
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+        }
+
+        .log-admin-controls textarea {
+            width: 100%;
+            background: var(--bg-dark);
+            border: 1px solid var(--border-color);
+            color: var(--text-white);
+            padding: 0.5rem;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            min-height: 50px;
+            resize: vertical;
+        }
+
+        .log-admin-buttons {
+            display: flex;
+            gap: 0.6rem;
+        }
+
+        .btn-small {
+            padding: 0.4rem 0.9rem;
+            font-size: 0.75rem;
+            border-radius: 4px;
+            border: none;
+            cursor: pointer;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .btn-small.save-note {
+            background: var(--accent-yellow);
+            color: #000;
+        }
+
+        .btn-small.delete-log {
+            background: #d90429;
+            color: #fff;
+        }
+
+        .btn-small:hover {
+            filter: brightness(1.1);
+        }
+
+        .guidelines-section {
+            margin-bottom: 2.5rem;
+        }
+
+        .guidelines-section h2 {
+            font-size: 1.6rem;
+            margin-bottom: 1.2rem;
+            color: var(--accent-orange);
+            border-bottom: 2px solid var(--accent-orange);
+            padding-bottom: 0.5rem;
+            display: inline-block;
+        }
+
+        .rule-card {
+            background-color: var(--bg-card);
+            padding: 1rem 1.2rem;
+            border-radius: 6px;
+            margin-bottom: 0.8rem;
+            border-left: 3px solid var(--border-color);
+        }
+
+        .rule-card:hover {
+            border-left-color: var(--accent-yellow);
+        }
+
+        .rule-card p {
+            color: var(--text-gray);
+            font-size: 0.95rem;
+            line-height: 1.4;
+        }
+
+        .about-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-left: 4px solid var(--accent-orange);
+            border-radius: 8px;
+            padding: 2rem;
+            font-size: 1.05rem;
+            line-height: 1.8;
+            color: #d1d1d1;
+            max-width: 800px;
+        }
+
+        .credits-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .credit-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: transform 0.3s;
+        }
+
+        .credit-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent-orange);
+        }
+
+        .avatar-frame {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            border: 3px solid var(--accent-yellow);
+            margin: 0 auto 1rem;
+            overflow: hidden;
+        }
+
+        .avatar-frame img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .person-name {
+            font-size: 1.1rem;
+            font-weight: 700;
+        }
+
+        .person-role {
+            color: var(--accent-orange);
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin: 0.2rem 0;
+        }
+
+        .person-username {
+            color: var(--text-gray);
+            font-size: 0.8rem;
+        }
+
+        .credits-note {
+            margin-top: 3rem;
+            background: var(--bg-card);
+            padding: 1.5rem;
+            border-radius: 8px;
+            text-align: center;
+            color: var(--text-gray);
+            font-style: italic;
+            border: 1px dashed var(--border-color);
+        }
+
+        .admin-banner {
+            background: rgba(88, 101, 242, 0.12);
+            border: 1px solid var(--discord-blurple);
+            border-left: 5px solid var(--discord-blurple);
+            padding: 1rem 1.5rem;
+            border-radius: 6px;
+            margin-bottom: 2rem;
+        }
+
+        .admin-panel-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+
+        .admin-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1.5rem;
+        }
+
+        .admin-card h3 {
+            color: var(--accent-orange);
+            margin-bottom: 1rem;
+        }
+
+        .admin-card label {
+            display: block;
+            font-size: 0.85rem;
+            color: var(--text-gray);
+            margin-bottom: 0.3rem;
+            margin-top: 1rem;
+        }
+
+        .admin-card input[type="text"],
+        .admin-card input[type="date"],
+        .admin-card textarea {
+            width: 100%;
+            background: var(--bg-dark);
+            border: 1px solid var(--border-color);
+            color: var(--text-white);
+            padding: 0.6rem 0.8rem;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            outline: none;
+        }
+
+        .admin-card textarea {
+            min-height: 100px;
+            resize: vertical;
+            font-family: monospace;
+        }
+
+        .btn-admin {
+            margin-top: 1.2rem;
+            background: linear-gradient(135deg, var(--accent-orange), var(--accent-yellow));
+            color: #000;
+            border: none;
+            padding: 0.7rem 1.4rem;
+            border-radius: 6px;
+            font-weight: 800;
+            cursor: pointer;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+        }
+
+        .btn-admin.secondary {
+            background: var(--bg-dark);
+            color: var(--text-white);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-admin:hover {
+            filter: brightness(1.1);
+        }
+
+        .guideline-edit-row {
+            display: grid;
+            grid-template-columns: 1fr 2fr auto;
+            gap: 0.6rem;
+            margin-bottom: 0.6rem;
+            align-items: start;
+        }
+
+        .guideline-edit-row input,
+        .guideline-edit-row textarea {
+            background: var(--bg-dark);
+            border: 1px solid var(--border-color);
+            color: var(--text-white);
+            padding: 0.5rem;
+            border-radius: 4px;
+            font-size: 0.85rem;
+        }
+
+        .guideline-edit-row textarea {
+            min-height: 44px;
+            resize: vertical;
+        }
+
+        .btn-remove-row {
+            background: #d90429;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            padding: 0.4rem 0.6rem;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+
+        .admin-status {
+            margin-top: 0.8rem;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .admin-status.success { color: #4ade80; }
+        .admin-status.error { color: #f87171; }
+
+        .subtle-note {
+            color: var(--text-gray);
+            font-size: 0.8rem;
+            margin-top: 0.3rem;
+        }
+
+        .loading-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(18, 18, 18, 0.9);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid var(--border-color);
+            border-top: 5px solid var(--accent-orange);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 1.5rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--text-white);
+            text-align: center;
+        }
+
+        footer {
+            background-color: #0a0a0a;
+            border-top: 1px solid var(--border-color);
+            padding: 2rem 0;
+            text-align: center;
+            color: var(--text-gray);
+            font-size: 0.85rem;
+            margin-top: auto;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <nav>
+            <div class="nav-left">
+                <div class="logo-container" onclick="showSection('home')">
+                    <img src="https://cdn.discordapp.com/attachments/1482464929654247634/1541000005567914004/image.png?ex=6a8bff97&is=6a8aae17&hm=ac3e3936f56218ebb60a83c153b5c38b272e2d2903d328cb780dd745b64a0142&" alt="NRC Logo">
+                    <span class="logo-text">NORTH REDSTONE</span>
+                </div>
+                <ul class="nav-links">
+                    <li><a href="https://discord.gg/YM8KWZP6cM" target="_blank">Appeals</a></li>
+                    <li><a onclick="showSection('about')">About NRC</a></li>
+                    <li><a onclick="showApplicationsLoading()">Applications</a></li>
+                    <li><a onclick="showSection('changelogs')">Game Change Logs</a></li>
+                    <li><a href="https://discord.gg/jEeuvTu4Ae" target="_blank">Discord Server</a></li>
+                    <li><a onclick="showSection('guidelines')">Community Guidelines</a></li>
+                    <li><a onclick="showSection('credits')">Credits</a></li>
+                    <li id="adminNavLink" style="display:none;"><a onclick="showSection('adminpanel')">Administrator Panel</a></li>
+                </ul>
+            </div>
+            <div class="account-area" id="accountArea">
+                <a href="/auth/discord" class="btn-discord-login" id="discordLoginBtn">
+                    <svg viewBox="0 0 640 512" xmlns="http://www.w3.org/2000/svg"><path d="M524.531,69.836a1.5,1.5,0,0,0-.764-.7A485.065,485.065,0,0,0,404.081,32.03a1.816,1.816,0,0,0-1.923.91,337.461,337.461,0,0,0-14.9,30.6,447.848,447.848,0,0,0-134.426,0,309.541,309.541,0,0,0-15.135-30.6,1.89,1.89,0,0,0-1.924-.91A483.689,483.689,0,0,0,116.085,69.137a1.712,1.712,0,0,0-.788.676C39.068,183.651,18.186,294.69,28.43,404.354a2.016,2.016,0,0,0,.765,1.375A487.666,487.666,0,0,0,176.02,479.918a1.9,1.9,0,0,0,2.063-.676A348.2,348.2,0,0,0,208.12,430.4a1.86,1.86,0,0,0-1.019-2.588,321.173,321.173,0,0,1-45.868-21.853,1.885,1.885,0,0,1-.185-3.126c3.082-2.309,6.166-4.711,9.109-7.137a1.819,1.819,0,0,1,1.9-.256c96.229,43.917,200.41,43.917,295.5,0a1.812,1.812,0,0,1,1.924.233c2.944,2.426,6.027,4.851,9.132,7.16a1.884,1.884,0,0,1-.162,3.126,301.407,301.407,0,0,1-45.89,21.83,1.875,1.875,0,0,0-1,2.611,391.055,391.055,0,0,0,30.014,48.815,1.864,1.864,0,0,0,2.063.7A486.048,486.048,0,0,0,610.7,405.729a1.882,1.882,0,0,0,.765-1.352C623.729,277.594,590.933,167.465,524.531,69.836ZM222.491,337.58c-28.972,0-52.844-26.587-52.844-59.239S193.056,219.1,222.491,219.1c29.665,0,53.306,26.82,52.843,59.239C275.334,310.993,251.924,337.58,222.491,337.58Zm195.38,0c-28.973,0-52.845-26.587-52.845-59.239S388.437,219.1,417.871,219.1c29.667,0,53.307,26.82,52.845,59.239C470.716,310.993,447.538,337.58,417.871,337.58Z"/></svg>
+                    Login with Discord
+                </a>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container">
+
+        <div id="home" class="page-section active">
+            <div class="hero">
+                <div>
+                    <h1 class="hero-title">NORTH REDSTONE <span>COUNTY JAIL</span></h1>
+                    <a href="https://www.roblox.com/games/106333511801260/North-Redstone-County-Jail" target="_blank" class="btn-play">Play Game</a>
+                    <p class="hero-desc" style="margin-top: 1.5rem;">Experience an immersive roleplay setting in North Redstone County Jail. Choose your path, follow the rules, and make your mark in our growing community.</p>
+                    <p style="color: var(--text-gray); font-size: 0.95rem; line-height: 1.5; border-left: 2px solid var(--accent-orange); padding-left: 1rem;">
+                        bblego4 Is the founder of North Redstone Community in March 1st 2026. The community consisted of multiple individuals that assisted. Which the users can be seen in credits.
+                    </p>
+                </div>
+                <div>
+                    <img src="https://cdn.discordapp.com/attachments/1482464929654247634/1541000161457864804/72cc780d-1f7d-4e93-9f50-6db8f267dbbc.png?ex=6a8bffbc&is=6a8aae3c&hm=e12eee4f81c0fcd5296cc27a64c92f424d49dfe7937e3e987ce674478b8829a5&" class="hero-banner" alt="Cell Block Overview">
+                </div>
+            </div>
+
+            <h2 style="margin-top: 3rem; color: var(--accent-orange);">Game Areas</h2>
+            <div class="feature-gallery">
+                <img src="https://cdn.discordapp.com/attachments/1482464929654247634/1541000078758772866/0983c892-8066-42d0-908b-5193304f68ff.png?ex=6a8bffa9&is=6a8aae29&hm=09eafd94667f361b169c3b9370b296fecf0b676707d1dcade4f1755e1c6bf3c5&" alt="Jail Cafeteria">
+                <img src="https://cdn.discordapp.com/attachments/1482464929654247634/1541000103689457764/2bcf861a-270d-4f98-a7f5-08f3b523735b.png?ex=6a8bffaf&is=6a8aae2f&hm=d5c87d325df7ad0f4f21079f93e5960ab89c94ea8c1f84507e5a194298ff51b5&" alt="Exterior Yard Path">
+                <img src="https://cdn.discordapp.com/attachments/1482464929654247634/1541000131632046131/8cabc583-4ae9-433c-8732-197111c9b368.png?ex=6a8bffb5&is=6a8aae35&hm=ca54dab24e68d1bca239ae609921d8e9a671ab7e0192d9af2b78db5472e5ef94&" alt="Cell Block Walkway">
+            </div>
+        </div>
+
+        <div id="about" class="page-section">
+            <h1 style="color: var(--text-white); margin-bottom: 1.5rem;">About NRC</h1>
+            <div class="about-card">
+                The North Redstone community was not a full thought idea on how the building would run. The game is a version 1 of County Jail Roleplay. County Jail Roleplay was removed from Roblox due to a false DMCA claim. North Redstone is not an exact copy — it is a reference to version one of the game.
+                <br><br>
+                Owner of the old CJRP (County Jail Roleplay) game: <strong style="color: var(--accent-yellow);">xTheBlockerx</strong>.
+            </div>
+        </div>
+
+        <div id="changelogs" class="page-section">
+            <div class="changelog-header">
+                <img src="https://cdn.discordapp.com/attachments/1482464929654247634/1541000005567914004/image.png?ex=6a8bff97&is=6a8aae17&hm=ac3e3936f56218ebb60a83c153b5c38b272e2d2903d328cb780dd745b64a0142&" alt="NRC Shield Logo">
+                <div>
+                    <h1 style="color: var(--text-white);">Game Change Logs</h1>
+                    <p style="color: var(--text-gray);">Stay updated with the latest updates and bug fixes.</p>
+                </div>
+            </div>
+
+            <div class="filter-container">
+                <label for="sortOrder">Sort Order:</label>
+                <select id="sortOrder" onchange="renderChangelogs()">
+                    <option value="newest">Most Recent to Oldest</option>
+                    <option value="oldest">Oldest to Most Recent</option>
+                </select>
+            </div>
+
+            <div id="logsWrapper">
+                <p class="subtle-note">Loading change logs...</p>
+            </div>
+
+            <div class="notice-box">
+                <span class="notice-icon">⚠️</span>
+                <span><strong>( ! )</strong> | All Bug Reports must be made in the discord. Note: Trying to get staff to fix it and not reporting it will result in moderation.</span>
+            </div>
+        </div>
+
+        <div id="guidelines" class="page-section">
+
+            <div class="dmca-box">
+                <img src="https://cdn.discordapp.com/attachments/1482464929654247634/1540999953642692618/dmca-badge-w250-2x1-04.png?ex=6a8bff8b&is=6a8aae0b&hm=8db48655814a00aa6626fd4e4998e9c55de5692ac23293058369684c6f5577df&" alt="DMCA Badge" style="border-radius: 4px;">
+                <div class="dmca-text">
+                    <strong> All assets presiding to the game or assets presiding to North Redstone community is protected by DMCA (Digital Millennium Copyright Act of 1998). Attempting to steal assets or trying to replica a exact asset of NRC will result in a DMCA violation and may result in court proceedings.
+                </div>
+            </div>
+
+            <div class="guidelines-section">
+                <h2>North Redstone Community Game Guidelines</h2>
+                <div id="gameGuidelinesWrapper">
+                    <p class="subtle-note">Loading guidelines...</p>
+                </div>
+            </div>
+
+            <div class="guidelines-section">
+                <h2>North Redstone Community Discord Guidelines</h2>
+                <div id="discordGuidelinesWrapper">
+                    <p class="subtle-note">Loading guidelines...</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="credits" class="page-section">
+            <h1 style="color: var(--text-white); text-align: center; margin-bottom: 0.5rem;">Community Credits</h1>
+            <p style="color: var(--text-gray); text-align: center;">Meet the team behind North Redstone Community</p>
+
+            <div class="credits-grid">
+                <div class="credit-card">
+                    <div class="avatar-frame">
+                        <img src="https://images-ext-1.discordapp.net/external/V81CxiW3S4PqF9DSl16RpmwRNBgjWw7zfhPiDrWdS5Y/%3Fsize%3D512/https/cdn.discordapp.com/avatars/918297335258304522/f56e64e03c550615c2b5f714d0b1884f.png?format=webp&quality=lossless" alt="Truly Avatar">
+                    </div>
+                    <div class="person-name">Truly</div>
+                    <div class="person-role">Owner</div>
+                    <div class="person-username">@bblego4</div>
+                </div>
+
+                <div class="credit-card">
+                    <div class="avatar-frame">
+                        <img src="https://images-ext-1.discordapp.net/external/0TQYc8EsOWDIp9ZA1a7ZuQskoN1BCIiiwHKJwqqeHmI/%3Fsize%3D512/https/cdn.discordapp.com/avatars/926889740345679903/a_2cb92e0fe61cf965b984eadbd740fab8.gif" alt="Devin Avatar">
+                    </div>
+                    <div class="person-name">Devin</div>
+                    <div class="person-role">Co-Owner</div>
+                    <div class="person-username">@devin_920</div>
+                </div>
+
+                <div class="credit-card">
+                    <div class="avatar-frame">
+                        <img src="https://cdn.discordapp.com/attachments/1482464929654247634/1540997567331041290/image.png?ex=6a8bfd52&is=6a8aabd2&hm=cc80d8041beecdb3daee7a2abd55c91966e1e5ceeda3c112c4c1f473d4241af5&" alt="Zeph Avatar">
+                    </div>
+                    <div class="person-name">Zeph</div>
+                    <div class="person-role">Assistant Owner</div>
+                    <div class="person-username">@itszeph</div>
+                </div>
+
+                <div class="credit-card">
+                    <div class="avatar-frame">
+                        <img src="https://media.discordapp.net/attachments/1482464929654247634/1540998201447026758/image.png?ex=6a8bfde9&is=6a8aac69&hm=83fd120e22cae673770ca0eb863b7d49a14b9cedd41f137b42dd7c311b95a8e6&=&format=webp&quality=lossless&width=384&height=378" alt="Jack Avatar">
+                    </div>
+                    <div class="person-name">Jack</div>
+                    <div class="person-role">Community Manager</div>
+                    <div class="person-username">@itskingjackson</div>
+                </div>
+
+                <div class="credit-card">
+                    <div class="avatar-frame">
+                        <img src="https://images-ext-1.discordapp.net/external/68Ic8rBRx2xRTgsxULhMGH4db9RrPVs2Htb6aQDcBss/%3Fsize%3D512/https/cdn.discordapp.com/avatars/1422066925588058112/a_61e85a1844702cda4cc297ccdf6b8612.gif" alt="llucasxx Avatar">
+                    </div>
+                    <div class="person-name">llucasxx</div>
+                    <div class="person-role">Website Manager/Moderator</div>
+                    <div class="person-username">@llucasxxx</div>
+                </div>
+            </div>
+
+            <div class="credits-note">
+                " All members named in the credits have that contributed to this community since the start. North Redstone appreciates all of their moderators and contributors that supported the community from the start that are not named in credits."
+            </div>
+        </div>
+
+        <div id="adminpanel" class="page-section">
+            <h1 style="color: var(--text-white); margin-bottom: 1rem;">Administrator Panel</h1>
+            <div class="admin-banner">
+                Changes made here are saved immediately and go live on the public site.
+            </div>
+
+            <div class="admin-panel-grid">
+
+                <div class="admin-card">
+                    <h3>Add Game Change Log</h3>
+                    <label for="clTitle">Title</label>
+                    <input type="text" id="clTitle" placeholder="e.g. 1.2.5 UPDATE">
+
+                    <label for="clDate">Date</label>
+                    <input type="date" id="clDate">
+
+                    <label for="clBullets">Bullet points (one per line)</label>
+                    <textarea id="clBullets" placeholder="Added new feature&#10;Fixed a bug&#10;..."></textarea>
+
+                    <label for="clNote">Note (optional, shown on the public change log)</label>
+                    <textarea id="clNote" placeholder="e.g. This update will require a full re-download of the game files."></textarea>
+
+                    <button class="btn-admin" onclick="submitChangelog()">Post Change Log</button>
+                    <div id="clStatus" class="admin-status"></div>
+                </div>
+
+                <div class="admin-card">
+                    <h3>Community Guidelines Editor</h3>
+                    <p class="subtle-note">Edit, add, or remove rules below, then save each section.</p>
+
+                    <h4 style="margin-top: 1.2rem; color: var(--accent-yellow);">Game Guidelines</h4>
+                    <div id="gameGuidelinesEditor"></div>
+                    <button class="btn-admin secondary" onclick="addGuidelineRow('game')">+ Add Rule</button>
+                    <button class="btn-admin" onclick="saveGuidelines('game')">Save Game Guidelines</button>
+                    <div id="gameGuidelinesStatus" class="admin-status"></div>
+
+                    <h4 style="margin-top: 2rem; color: var(--accent-yellow);">Discord Guidelines</h4>
+                    <div id="discordGuidelinesEditor"></div>
+                    <button class="btn-admin secondary" onclick="addGuidelineRow('discord')">+ Add Rule</button>
+                    <button class="btn-admin" onclick="saveGuidelines('discord')">Save Discord Guidelines</button>
+                    <div id="discordGuidelinesStatus" class="admin-status"></div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div id="loadingOverlay" class="loading-overlay">
+        <div class="spinner"></div>
+        <div class="loading-text">Coming Soon! - Waiting for bblego4 for the application questions</div>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 North Redstone Community. All rights reserved.</p>
+    </footer>
+
+    <script>
+
+        function showSection(sectionId) {
+            const sections = document.querySelectorAll('.page-section');
+            sections.forEach(section => section.classList.remove('active'));
+            document.getElementById(sectionId).classList.add('active');
+            window.scrollTo(0, 0);
+        }
+
+        function showApplicationsLoading() {
+            const overlay = document.getElementById('loadingOverlay');
+            overlay.style.display = 'flex';
+            setTimeout(() => {
+                overlay.style.display = 'none';
+            }, 3000);
+        }
+
+        function escapeHtml(str) {
+            const div = document.createElement('div');
+            div.textContent = str == null ? '' : String(str);
+            return div.innerHTML;
+        }
+
+        let currentSession = { loggedIn: false, isAdmin: false, username: null };
+
+        async function loadSession() {
+            try {
+                const res = await fetch('/api/session');
+                currentSession = await res.json();
+            } catch (e) {
+                currentSession = { loggedIn: false, isAdmin: false, username: null };
+            }
+
+            const accountArea = document.getElementById('accountArea');
+            const adminNavLink = document.getElementById('adminNavLink');
+
+            if (currentSession.loggedIn) {
+                accountArea.innerHTML = `
+                    <span class="welcome-text">Welcome to North Redstone, <span>${escapeHtml(currentSession.username)}</span></span>
+                    <a class="btn-logout" onclick="logout()">Logout</a>
+                `;
+                adminNavLink.style.display = currentSession.isAdmin ? 'block' : 'none';
+            } else {
+                accountArea.innerHTML = `
+                    <a href="/auth/discord" class="btn-discord-login">
+                        <svg viewBox="0 0 640 512" xmlns="http://www.w3.org/2000/svg"><path d="M524.531,69.836a1.5,1.5,0,0,0-.764-.7A485.065,485.065,0,0,0,404.081,32.03a1.816,1.816,0,0,0-1.923.91,337.461,337.461,0,0,0-14.9,30.6,447.848,447.848,0,0,0-134.426,0,309.541,309.541,0,0,0-15.135-30.6,1.89,1.89,0,0,0-1.924-.91A483.689,483.689,0,0,0,116.085,69.137a1.712,1.712,0,0,0-.788.676C39.068,183.651,18.186,294.69,28.43,404.354a2.016,2.016,0,0,0,.765,1.375A487.666,487.666,0,0,0,176.02,479.918a1.9,1.9,0,0,0,2.063-.676A348.2,348.2,0,0,0,208.12,430.4a1.86,1.86,0,0,0-1.019-2.588,321.173,321.173,0,0,1-45.868-21.853,1.885,1.885,0,0,1-.185-3.126c3.082-2.309,6.166-4.711,9.109-7.137a1.819,1.819,0,0,1,1.9-.256c96.229,43.917,200.41,43.917,295.5,0a1.812,1.812,0,0,1,1.924.233c2.944,2.426,6.027,4.851,9.132,7.16a1.884,1.884,0,0,1-.162,3.126,301.407,301.407,0,0,1-45.89,21.83,1.875,1.875,0,0,0-1,2.611,391.055,391.055,0,0,0,30.014,48.815,1.864,1.864,0,0,0,2.063.7A486.048,486.048,0,0,0,610.7,405.729a1.882,1.882,0,0,0,.765-1.352C623.729,277.594,590.933,167.465,524.531,69.836ZM222.491,337.58c-28.972,0-52.844-26.587-52.844-59.239S193.056,219.1,222.491,219.1c29.665,0,53.306,26.82,52.843,59.239C275.334,310.993,251.924,337.58,222.491,337.58Zm195.38,0c-28.973,0-52.845-26.587-52.845-59.239S388.437,219.1,417.871,219.1c29.667,0,53.307,26.82,52.845,59.239C470.716,310.993,447.538,337.58,417.871,337.58Z"/></svg>
+                        Login with Discord
+                    </a>`;
+                adminNavLink.style.display = 'none';
+            }
+        }
+
+        async function logout() {
+            await fetch('/auth/logout', { method: 'POST' });
+            await loadSession();
+            showSection('home');
+        }
+
+        async function adminFetch(url, options) {
+            const res = await fetch(url, options);
+            if (res.status === 403) {
+                await loadSession();
+                if (!currentSession.isAdmin) {
+                    throw new Error('Your admin session expired (often caused by the server restarting). Please log out and log back in with Discord, then try again.');
+                }
+            }
+            if (!res.ok) {
+                let message = 'Something went wrong.';
+                try { message = (await res.json()).error || message; } catch (e) { /* ignore */ }
+                throw new Error(message);
+            }
+            return res.json();
+        }
+
+        let changelogsCache = [];
+
+        async function loadChangelogs() {
+            try {
+                const res = await fetch('/api/changelogs');
+                changelogsCache = await res.json();
+            } catch (e) {
+                changelogsCache = [];
+            }
+            renderChangelogs();
+        }
+
+        function renderChangelogs() {
+            const sortOrder = document.getElementById('sortOrder').value;
+            const sorted = [...changelogsCache].sort((a, b) =>
+                sortOrder === 'newest' ? b.date.localeCompare(a.date) : a.date.localeCompare(b.date)
+            );
+
+            const wrapper = document.getElementById('logsWrapper');
+            if (sorted.length === 0) {
+                wrapper.innerHTML = '<p class="subtle-note">No change logs yet.</p>';
+                return;
+            }
+
+            wrapper.innerHTML = sorted.map(log => `
+                <div class="log-card">
+                    <div class="log-title-row">
+                        <span class="log-title">${escapeHtml(log.title)}</span>
+                        <span class="log-date">${escapeHtml(formatDate(log.date))}</span>
+                    </div>
+                    <div class="log-content">
+                        <ul>
+                            ${log.bullets.map(b => `<li>${escapeHtml(b)}</li>`).join('')}
+                        </ul>
+                    </div>
+                    ${log.note ? `<div class="log-note"><strong>Note:</strong> ${escapeHtml(log.note)}</div>` : ''}
+                    ${currentSession.isAdmin ? `
+                        <div class="log-admin-controls">
+                            <textarea id="note-${log.id}" placeholder="Add or edit a note for this update...">${escapeHtml(log.note || '')}</textarea>
+                            <div class="log-admin-buttons">
+                                <button class="btn-small save-note" onclick="saveChangelogNote('${log.id}')">Save Note</button>
+                                <button class="btn-small delete-log" onclick="deleteChangelog('${log.id}')">Delete Change Log</button>
+                            </div>
+                            <div id="logStatus-${log.id}" class="admin-status"></div>
+                        </div>
+                    ` : ''}
+                </div>
+            `).join('');
+        }
+
+        function formatDate(isoDate) {
+            const parts = isoDate.split('-');
+            if (parts.length !== 3) return isoDate;
+            const [y, m, d] = parts;
+            return `${parseInt(m)}/${parseInt(d)}/${y}`;
+        }
+
+        let guidelinesCache = { game: [], discord: [] };
+
+        async function loadGuidelines() {
+            try {
+                const res = await fetch('/api/guidelines');
+                guidelinesCache = await res.json();
+            } catch (e) {
+                guidelinesCache = { game: [], discord: [] };
+            }
+            renderGuidelinesPublic('game', 'gameGuidelinesWrapper');
+            renderGuidelinesPublic('discord', 'discordGuidelinesWrapper');
+            renderGuidelinesEditor('game');
+            renderGuidelinesEditor('discord');
+        }
+
+        function renderGuidelinesPublic(category, wrapperId) {
+            const wrapper = document.getElementById(wrapperId);
+            const rules = guidelinesCache[category] || [];
+            if (rules.length === 0) {
+                wrapper.innerHTML = '<p class="subtle-note">No guidelines have been posted yet.</p>';
+                return;
+            }
+            wrapper.innerHTML = rules.map((r, i) => `
+                <div class="rule-card">
+                    <p><strong>${i + 1}. ${escapeHtml(r.title)}</strong> ${escapeHtml(r.description)}</p>
+                </div>
+            `).join('');
+        }
+
+        async function submitChangelog() {
+            const title = document.getElementById('clTitle').value.trim();
+            const date = document.getElementById('clDate').value;
+            const bullets = document.getElementById('clBullets').value
+                .split('\n')
+                .map(b => b.trim())
+                .filter(Boolean);
+            const note = document.getElementById('clNote').value.trim();
+            const statusEl = document.getElementById('clStatus');
+
+            if (!title || !date || bullets.length === 0) {
+                statusEl.textContent = 'Please fill in a title, date, and at least one bullet point.';
+                statusEl.className = 'admin-status error';
+                return;
+            }
+
+            try {
+                changelogsCache = await adminFetch('/api/changelogs', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ title, date, bullets, note }),
+                });
+                renderChangelogs();
+                statusEl.textContent = 'Change log posted!';
+                statusEl.className = 'admin-status success';
+                document.getElementById('clTitle').value = '';
+                document.getElementById('clBullets').value = '';
+                document.getElementById('clNote').value = '';
+            } catch (e) {
+                statusEl.textContent = e.message;
+                statusEl.className = 'admin-status error';
+            }
+        }
+
+        async function saveChangelogNote(id) {
+            const statusEl = document.getElementById(`logStatus-${id}`);
+            const note = document.getElementById(`note-${id}`).value.trim();
+            try {
+                changelogsCache = await adminFetch(`/api/changelogs/${id}`, {
+                    method: 'PATCH',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ note }),
+                });
+                renderChangelogs();
+            } catch (e) {
+                if (statusEl) {
+                    statusEl.textContent = e.message;
+                    statusEl.className = 'admin-status error';
+                } else {
+                    alert(e.message);
+                }
+            }
+        }
+
+        async function deleteChangelog(id) {
+            if (!confirm('Delete this change log entry? This cannot be undone.')) return;
+            try {
+                changelogsCache = await adminFetch(`/api/changelogs/${id}`, { method: 'DELETE' });
+                renderChangelogs();
+            } catch (e) {
+                alert(e.message);
+            }
+        }
+
+        let guidelinesDraft = { game: [], discord: [] };
+
+        function renderGuidelinesEditor(category) {
+            guidelinesDraft[category] = (guidelinesCache[category] || []).map(r => ({ ...r }));
+            drawGuidelineRows(category);
+        }
+
+        function drawGuidelineRows(category) {
+            const editorId = category === 'game' ? 'gameGuidelinesEditor' : 'discordGuidelinesEditor';
+            const editor = document.getElementById(editorId);
+            const rows = guidelinesDraft[category];
+
+            editor.innerHTML = rows.map((r, i) => `
+                <div class="guideline-edit-row">
+                    <input type="text" value="${escapeHtml(r.title)}" placeholder="Rule title"
+                        oninput="updateGuidelineField('${category}', ${i}, 'title', this.value)">
+                    <textarea placeholder="Rule description"
+                        oninput="updateGuidelineField('${category}', ${i}, 'description', this.value)">${escapeHtml(r.description)}</textarea>
+                    <button class="btn-remove-row" onclick="removeGuidelineRow('${category}', ${i})">Remove</button>
+                </div>
+            `).join('');
+        }
+
+        function updateGuidelineField(category, index, field, value) {
+            guidelinesDraft[category][index][field] = value;
+        }
+
+        function addGuidelineRow(category) {
+            guidelinesDraft[category].push({ title: '', description: '' });
+            drawGuidelineRows(category);
+        }
+
+        function removeGuidelineRow(category, index) {
+            guidelinesDraft[category].splice(index, 1);
+            drawGuidelineRows(category);
+        }
+
+        async function saveGuidelines(category) {
+            const statusId = category === 'game' ? 'gameGuidelinesStatus' : 'discordGuidelinesStatus';
+            const statusEl = document.getElementById(statusId);
+
+            const cleanedRows = guidelinesDraft[category].filter(r => r.title.trim());
+            const payload = {
+                game: category === 'game' ? cleanedRows : guidelinesCache.game,
+                discord: category === 'discord' ? cleanedRows : guidelinesCache.discord,
+            };
+
+            try {
+                guidelinesCache = await adminFetch('/api/guidelines', {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload),
+                });
+                renderGuidelinesPublic('game', 'gameGuidelinesWrapper');
+                renderGuidelinesPublic('discord', 'discordGuidelinesWrapper');
+                renderGuidelinesEditor(category);
+                statusEl.textContent = 'Saved!';
+                statusEl.className = 'admin-status success';
+            } catch (e) {
+                statusEl.textContent = e.message;
+                statusEl.className = 'admin-status error';
+            }
+        }
+
+        (async function init() {
+            const params = new URLSearchParams(window.location.search);
+            await loadSession();
+            await loadChangelogs();
+            await loadGuidelines();
+
+            if (params.get('login') === 'failed') {
+                alert('Discord login failed. Please try again.');
+            }
+        })();
+    </script>
+</body>
+</html>
