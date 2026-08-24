@@ -940,6 +940,13 @@
     <script>
 
         function showSection(sectionId) {
+            // Guard the admin panel here, not just via the hidden nav link.
+            // Someone can un-hide the <li> in devtools or call showSection('adminpanel')
+            // directly from the console — this check stops that regardless of how
+            // the request to open the section arrives.
+            if (sectionId === 'adminpanel' && !currentSession.isAdmin) {
+                sectionId = 'home';
+            }
             const sections = document.querySelectorAll('.page-section');
             sections.forEach(section => section.classList.remove('active'));
             document.getElementById(sectionId).classList.add('active');
