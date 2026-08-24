@@ -15,7 +15,25 @@ const SESSION_SECRET = process.env.SESSION_SECRET || 'change-me-in-.env';
 
 const ADMIN_USERNAMES = ['bblego4', 'llucasxxx', 'devin_920'].map(u => u.toLowerCase());
 
+// IMPORTANT: the app runs behind a reverse proxy (Render/Heroku/etc. — that's
+// why getRedirectUri() reads x-forwarded-proto/x-forwarded-host). Without this,
+// Express never sees the connection as HTTPS, so the "secure" session cookie
+// below silently fails to be set/read after the Discord OAuth redirect. That
+// was the cause of "login succeeds but the site still shows logged-out" —
+// the session cookie just wasn't sticking.
+app.set('trust proxy', 1);
+
+function ensureDataFile() {
+  if (!fs.existsSync(DATA_FILE)) {
+    writeData({
+      changelogs: [],
+      guidelines: { game: [], discord: [] },
+    });
+  }
+}
+
 function readData() {
+  ensureDataFile();
   return JSON.parse(fs.readFileSync(DATA_FILE, 'utf-8'));
 }
 
@@ -40,13 +58,16 @@ app.use(
     cookie: {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
       maxAge: 1000 * 60 * 60 * 24 * 7,
     },
   })
 );
 
-// Serve static assets from root and public
-app.use(express.static(__dirname));
+// Serve only a dedicated public/ folder for static assets (CSS/JS/images you
+// add yourself later). Previously the whole project directory (__dirname) was
+// served statically, which meant server.js and data.json were publicly
+// downloadable at /server.js and /data.json. That's removed now.
 app.use(express.static(path.join(__dirname, 'public')));
 
 function isAdminUser(discordUser) {
@@ -122,7 +143,13 @@ app.get('/auth/discord/callback', async (req, res) => {
       isAdmin: isAdminUser(discordUser),
     };
 
-    res.redirect('/');
+    // Make sure the session is actually flushed to the store before we
+    // redirect back — otherwise on some proxies/hosts the browser can land
+    // back on '/' and hit /api/session before the write finishes.
+    req.session.save(err => {
+      if (err) console.error('Session save error:', err);
+      res.redirect('/');
+    });
   } catch (err) {
     console.error('Discord OAuth error:', err);
     res.redirect('/?login=failed');
@@ -202,6 +229,8 @@ app.put('/api/guidelines', requireAdmin, (req, res) => {
   writeData(data);
   res.json(data.guidelines);
 });
+
+ensureDataFile();
 
 app.listen(PORT, () => {
   console.log(`North Redstone Community server running on port ${PORT}`);
