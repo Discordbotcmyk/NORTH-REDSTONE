@@ -664,6 +664,16 @@
             margin-top: 0.3rem;
         }
 
+        .access-denied-box {
+            background-color: var(--bg-card);
+            border: 1px solid #d90429;
+            border-left: 4px solid #d90429;
+            padding: 2rem;
+            border-radius: 8px;
+            color: #ff8fa3;
+            text-align: center;
+        }
+
         .loading-overlay {
             display: none;
             position: fixed;
@@ -698,6 +708,38 @@
             font-weight: 700;
             color: var(--text-white);
             text-align: center;
+        }
+
+        .session-toast {
+            display: none;
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            max-width: 340px;
+            background: var(--bg-card);
+            border: 1px solid var(--accent-yellow);
+            border-left: 4px solid var(--accent-yellow);
+            color: var(--text-white);
+            padding: 1rem 1.2rem;
+            border-radius: 8px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+            z-index: 3000;
+            font-size: 0.9rem;
+            line-height: 1.4;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .session-toast.warning {
+            border-color: var(--accent-yellow);
+        }
+
+        .session-toast.expired {
+            border-color: #d90429;
+        }
+
+        .session-toast strong {
+            display: block;
+            margin-bottom: 0.3rem;
         }
 
         footer {
@@ -883,46 +925,18 @@
 
         <div id="adminpanel" class="page-section">
             <h1 style="color: var(--text-white); margin-bottom: 1rem;">Administrator Panel</h1>
-            <div class="admin-banner">
-                Changes made here are saved immediately and go live on the public site.
-            </div>
-
-            <div class="admin-panel-grid">
-
-                <div class="admin-card">
-                    <h3>Add Game Change Log</h3>
-                    <label for="clTitle">Title</label>
-                    <input type="text" id="clTitle" placeholder="e.g. 1.2.5 UPDATE">
-
-                    <label for="clDate">Date</label>
-                    <input type="date" id="clDate">
-
-                    <label for="clBullets">Bullet points (one per line)</label>
-                    <textarea id="clBullets" placeholder="Added new feature&#10;Fixed a bug&#10;..."></textarea>
-
-                    <label for="clNote">Note (optional, shown on the public change log)</label>
-                    <textarea id="clNote" placeholder="e.g. This update will require a full re-download of the game files."></textarea>
-
-                    <button class="btn-admin" onclick="submitChangelog()">Post Change Log</button>
-                    <div id="clStatus" class="admin-status"></div>
-                </div>
-
-                <div class="admin-card">
-                    <h3>Community Guidelines Editor</h3>
-                    <p class="subtle-note">Edit, add, or remove rules below, then save each section.</p>
-
-                    <h4 style="margin-top: 1.2rem; color: var(--accent-yellow);">Game Guidelines</h4>
-                    <div id="gameGuidelinesEditor"></div>
-                    <button class="btn-admin secondary" onclick="addGuidelineRow('game')">+ Add Rule</button>
-                    <button class="btn-admin" onclick="saveGuidelines('game')">Save Game Guidelines</button>
-                    <div id="gameGuidelinesStatus" class="admin-status"></div>
-
-                    <h4 style="margin-top: 2rem; color: var(--accent-yellow);">Discord Guidelines</h4>
-                    <div id="discordGuidelinesEditor"></div>
-                    <button class="btn-admin secondary" onclick="addGuidelineRow('discord')">+ Add Rule</button>
-                    <button class="btn-admin" onclick="saveGuidelines('discord')">Save Discord Guidelines</button>
-                    <div id="discordGuidelinesStatus" class="admin-status"></div>
-                </div>
+            <!--
+                Deliberately empty. Previously this contained the full change-log
+                poster and guidelines editor markup, statically, all the time —
+                meaning a non-admin could reveal a fully-populated (if
+                non-functional) admin UI just by forcing this div's CSS class via
+                devtools. Now the actual form markup is only injected by
+                renderAdminPanel(), and only after a fresh, server-verified
+                isAdmin check. Force this section open without being an admin and
+                you get nothing but the message below.
+            -->
+            <div id="adminPanelContent">
+                <p class="subtle-note">Loading...</p>
             </div>
         </div>
 
@@ -933,20 +947,46 @@
         <div class="loading-text">Coming Soon! - Waiting for bblego4 for the application questions</div>
     </div>
 
+    <div id="sessionToast" class="session-toast">
+        <strong id="sessionToastTitle">Session Notice</strong>
+        <span id="sessionToastMsg"></span>
+    </div>
+
     <footer>
         <p>&copy; 2026 North Redstone Community. All rights reserved.</p>
     </footer>
 
     <script>
 
-        function showSection(sectionId) {
-            // Guard the admin panel here, not just via the hidden nav link.
-            // Someone can un-hide the <li> in devtools or call showSection('adminpanel')
-            // directly from the console — this check stops that regardless of how
-            // the request to open the section arrives.
-            if (sectionId === 'adminpanel' && !currentSession.isAdmin) {
-                sectionId = 'home';
+        // ------------------------------------------------------------------
+        // Section navigation
+        // ------------------------------------------------------------------
+
+        async function showSection(sectionId) {
+            if (sectionId === 'adminpanel') {
+                // Never trust the in-memory `currentSession` object to decide
+                // whether to reveal the admin panel — it's an ordinary JS
+                // variable sitting in page scope, and anyone can open devtools
+                // and run `currentSession.isAdmin = true` before clicking this
+                // link. The server's answer, fetched fresh right now, is the
+                // only thing worth trusting.
+                try {
+                    const res = await fetch('/api/session');
+                    currentSession = await res.json();
+                } catch (e) {
+                    currentSession = { loggedIn: false, isAdmin: false, username: null };
+                }
+
+                const adminNavLink = document.getElementById('adminNavLink');
+                adminNavLink.style.display = currentSession.isAdmin ? 'block' : 'none';
+
+                if (!currentSession.isAdmin) {
+                    sectionId = 'home';
+                } else {
+                    await renderAdminPanel();
+                }
             }
+
             const sections = document.querySelectorAll('.page-section');
             sections.forEach(section => section.classList.remove('active'));
             document.getElementById(sectionId).classList.add('active');
@@ -986,6 +1026,7 @@
                     <a class="btn-logout" onclick="logout()">Logout</a>
                 `;
                 adminNavLink.style.display = currentSession.isAdmin ? 'block' : 'none';
+                startSessionWatcher(currentSession.expiresAt);
             } else {
                 accountArea.innerHTML = `
                     <a href="/auth/discord" class="btn-discord-login">
@@ -993,11 +1034,13 @@
                         Login with Discord
                     </a>`;
                 adminNavLink.style.display = 'none';
+                clearSessionWatchers();
             }
         }
 
         async function logout() {
             await fetch('/auth/logout', { method: 'POST' });
+            clearSessionWatchers();
             await loadSession();
             showSection('home');
         }
@@ -1007,7 +1050,7 @@
             if (res.status === 403) {
                 await loadSession();
                 if (!currentSession.isAdmin) {
-                    throw new Error('Your admin session expired (often caused by the server restarting). Please log out and log back in with Discord, then try again.');
+                    throw new Error('Your admin session expired (often caused by the server restarting, or 30 minutes of inactivity). Please log out and log back in with Discord, then try again.');
                 }
             }
             if (!res.ok) {
@@ -1017,6 +1060,117 @@
             }
             return res.json();
         }
+
+        // ------------------------------------------------------------------
+        // Session watcher: 30-minute idle timeout with a heads-up toast and
+        // an auto-logout-with-notice when it actually expires.
+        // ------------------------------------------------------------------
+
+        let sessionExpiresAt = null;
+        let heartbeatIntervalId = null;
+        let sessionWarnTimeoutId = null;
+        let sessionExpireTimeoutId = null;
+        let lastActivityAt = Date.now();
+
+        const ACTIVITY_EVENTS = ['mousemove', 'mousedown', 'keydown', 'scroll', 'touchstart'];
+        function recordActivity() { lastActivityAt = Date.now(); }
+        ACTIVITY_EVENTS.forEach(evt => window.addEventListener(evt, recordActivity, { passive: true }));
+
+        function showSessionToast(title, message, kind) {
+            const toast = document.getElementById('sessionToast');
+            document.getElementById('sessionToastTitle').textContent = title;
+            document.getElementById('sessionToastMsg').textContent = message;
+            toast.className = 'session-toast ' + kind;
+            toast.style.display = 'block';
+        }
+
+        function hideSessionToast() {
+            document.getElementById('sessionToast').style.display = 'none';
+        }
+
+        function clearSessionWatchers() {
+            if (heartbeatIntervalId) clearInterval(heartbeatIntervalId);
+            if (sessionWarnTimeoutId) clearTimeout(sessionWarnTimeoutId);
+            if (sessionExpireTimeoutId) clearTimeout(sessionExpireTimeoutId);
+            heartbeatIntervalId = null;
+            sessionWarnTimeoutId = null;
+            sessionExpireTimeoutId = null;
+            sessionExpiresAt = null;
+            hideSessionToast();
+        }
+
+        function scheduleSessionTimers() {
+            if (sessionWarnTimeoutId) clearTimeout(sessionWarnTimeoutId);
+            if (sessionExpireTimeoutId) clearTimeout(sessionExpireTimeoutId);
+            if (!sessionExpiresAt) return;
+
+            const msLeft = sessionExpiresAt - Date.now();
+            const warnMsBefore = 60 * 1000; // heads-up ~1 minute before expiry
+
+            if (msLeft > warnMsBefore) {
+                sessionWarnTimeoutId = setTimeout(() => {
+                    showSessionToast('Heads up', 'Your session will expire in about a minute due to inactivity.', 'warning');
+                }, msLeft - warnMsBefore);
+            }
+
+            sessionExpireTimeoutId = setTimeout(handleSessionExpired, Math.max(msLeft, 0));
+        }
+
+        async function handleSessionExpired() {
+            // Confirm with the server rather than just trusting the client
+            // clock — if there was genuine activity recently, the heartbeat
+            // below may have already pushed the real expiry out.
+            let stillLoggedIn = false;
+            try {
+                const res = await fetch('/api/session');
+                const fresh = await res.json();
+                if (fresh.loggedIn) {
+                    stillLoggedIn = true;
+                    sessionExpiresAt = fresh.expiresAt;
+                    scheduleSessionTimers();
+                }
+            } catch (e) { /* fall through to logging out */ }
+
+            if (stillLoggedIn) return;
+
+            clearSessionWatchers();
+            await fetch('/auth/logout', { method: 'POST' }).catch(() => {});
+            currentSession = { loggedIn: false, isAdmin: false, username: null };
+            await loadSession();
+            showSection('home');
+            showSessionToast('Logged out', 'You were logged out after 30 minutes of inactivity.', 'expired');
+            setTimeout(hideSessionToast, 8000);
+        }
+
+        function startSessionWatcher(expiresAt) {
+            clearSessionWatchers();
+            if (!expiresAt) return;
+            sessionExpiresAt = expiresAt;
+            scheduleSessionTimers();
+
+            // Every minute, if there's been genuine activity in the last two
+            // minutes, ping the server so the real session (and these timers)
+            // extend along with real usage. If the tab is just sitting open
+            // untouched, this stays silent and the 30-minute clock keeps
+            // counting down toward handleSessionExpired().
+            heartbeatIntervalId = setInterval(async () => {
+                if (Date.now() - lastActivityAt > 2 * 60 * 1000) return;
+                try {
+                    const res = await fetch('/api/heartbeat');
+                    if (res.ok) {
+                        const data = await res.json();
+                        if (data.loggedIn && data.expiresAt) {
+                            sessionExpiresAt = data.expiresAt;
+                            scheduleSessionTimers();
+                        }
+                    }
+                } catch (e) { /* ignore transient network errors */ }
+            }, 60 * 1000);
+        }
+
+        // ------------------------------------------------------------------
+        // Change logs
+        // ------------------------------------------------------------------
 
         let changelogsCache = [];
 
@@ -1073,35 +1227,6 @@
             if (parts.length !== 3) return isoDate;
             const [y, m, d] = parts;
             return `${parseInt(m)}/${parseInt(d)}/${y}`;
-        }
-
-        let guidelinesCache = { game: [], discord: [] };
-
-        async function loadGuidelines() {
-            try {
-                const res = await fetch('/api/guidelines');
-                guidelinesCache = await res.json();
-            } catch (e) {
-                guidelinesCache = { game: [], discord: [] };
-            }
-            renderGuidelinesPublic('game', 'gameGuidelinesWrapper');
-            renderGuidelinesPublic('discord', 'discordGuidelinesWrapper');
-            renderGuidelinesEditor('game');
-            renderGuidelinesEditor('discord');
-        }
-
-        function renderGuidelinesPublic(category, wrapperId) {
-            const wrapper = document.getElementById(wrapperId);
-            const rules = guidelinesCache[category] || [];
-            if (rules.length === 0) {
-                wrapper.innerHTML = '<p class="subtle-note">No guidelines have been posted yet.</p>';
-                return;
-            }
-            wrapper.innerHTML = rules.map((r, i) => `
-                <div class="rule-card">
-                    <p><strong>${i + 1}. ${escapeHtml(r.title)}</strong> ${escapeHtml(r.description)}</p>
-                </div>
-            `).join('');
         }
 
         async function submitChangelog() {
@@ -1168,7 +1293,104 @@
             }
         }
 
+        // ------------------------------------------------------------------
+        // Guidelines (public rendering)
+        // ------------------------------------------------------------------
+
+        let guidelinesCache = { game: [], discord: [] };
+
+        async function loadGuidelines() {
+            try {
+                const res = await fetch('/api/guidelines');
+                guidelinesCache = await res.json();
+            } catch (e) {
+                guidelinesCache = { game: [], discord: [] };
+            }
+            renderGuidelinesPublic('game', 'gameGuidelinesWrapper');
+            renderGuidelinesPublic('discord', 'discordGuidelinesWrapper');
+            // NOTE: the editor for these (admin-only) is intentionally NOT
+            // rendered here. It's only built by renderAdminPanel(), which is
+            // only called after a fresh, server-verified isAdmin check.
+        }
+
+        function renderGuidelinesPublic(category, wrapperId) {
+            const wrapper = document.getElementById(wrapperId);
+            const rules = guidelinesCache[category] || [];
+            if (rules.length === 0) {
+                wrapper.innerHTML = '<p class="subtle-note">No guidelines have been posted yet.</p>';
+                return;
+            }
+            wrapper.innerHTML = rules.map((r, i) => `
+                <div class="rule-card">
+                    <p><strong>${i + 1}. ${escapeHtml(r.title)}</strong> ${escapeHtml(r.description)}</p>
+                </div>
+            `).join('');
+        }
+
+        // ------------------------------------------------------------------
+        // Admin panel — markup is built here, on demand, only once an admin
+        // session has been freshly confirmed by the server. Nothing in this
+        // section exists in the page's static HTML.
+        // ------------------------------------------------------------------
+
         let guidelinesDraft = { game: [], discord: [] };
+
+        async function renderAdminPanel() {
+            const container = document.getElementById('adminPanelContent');
+
+            // Belt-and-braces: even though showSection() already checked,
+            // don't build the editable admin markup unless we're holding a
+            // freshly-confirmed admin session.
+            if (!currentSession.isAdmin) {
+                container.innerHTML = '<div class="access-denied-box">You do not have access to this page.</div>';
+                return;
+            }
+
+            container.innerHTML = `
+                <div class="admin-banner">
+                    Changes made here are saved immediately and go live on the public site.
+                </div>
+                <div class="admin-panel-grid">
+                    <div class="admin-card">
+                        <h3>Add Game Change Log</h3>
+                        <label for="clTitle">Title</label>
+                        <input type="text" id="clTitle" placeholder="e.g. 1.2.5 UPDATE">
+
+                        <label for="clDate">Date</label>
+                        <input type="date" id="clDate">
+
+                        <label for="clBullets">Bullet points (one per line)</label>
+                        <textarea id="clBullets" placeholder="Added new feature&#10;Fixed a bug&#10;..."></textarea>
+
+                        <label for="clNote">Note (optional, shown on the public change log)</label>
+                        <textarea id="clNote" placeholder="e.g. This update will require a full re-download of the game files."></textarea>
+
+                        <button class="btn-admin" onclick="submitChangelog()">Post Change Log</button>
+                        <div id="clStatus" class="admin-status"></div>
+                    </div>
+
+                    <div class="admin-card">
+                        <h3>Community Guidelines Editor</h3>
+                        <p class="subtle-note">Edit, add, or remove rules below, then save each section.</p>
+
+                        <h4 style="margin-top: 1.2rem; color: var(--accent-yellow);">Game Guidelines</h4>
+                        <div id="gameGuidelinesEditor"></div>
+                        <button class="btn-admin secondary" onclick="addGuidelineRow('game')">+ Add Rule</button>
+                        <button class="btn-admin" onclick="saveGuidelines('game')">Save Game Guidelines</button>
+                        <div id="gameGuidelinesStatus" class="admin-status"></div>
+
+                        <h4 style="margin-top: 2rem; color: var(--accent-yellow);">Discord Guidelines</h4>
+                        <div id="discordGuidelinesEditor"></div>
+                        <button class="btn-admin secondary" onclick="addGuidelineRow('discord')">+ Add Rule</button>
+                        <button class="btn-admin" onclick="saveGuidelines('discord')">Save Discord Guidelines</button>
+                        <div id="discordGuidelinesStatus" class="admin-status"></div>
+                    </div>
+                </div>
+            `;
+
+            renderGuidelinesEditor('game');
+            renderGuidelinesEditor('discord');
+        }
 
         function renderGuidelinesEditor(category) {
             guidelinesDraft[category] = (guidelinesCache[category] || []).map(r => ({ ...r }));
@@ -1178,6 +1400,7 @@
         function drawGuidelineRows(category) {
             const editorId = category === 'game' ? 'gameGuidelinesEditor' : 'discordGuidelinesEditor';
             const editor = document.getElementById(editorId);
+            if (!editor) return; // admin panel markup not currently mounted
             const rows = guidelinesDraft[category];
 
             editor.innerHTML = rows.map((r, i) => `
@@ -1208,6 +1431,7 @@
         async function saveGuidelines(category) {
             const statusId = category === 'game' ? 'gameGuidelinesStatus' : 'discordGuidelinesStatus';
             const statusEl = document.getElementById(statusId);
+            if (!statusEl) return; // admin panel markup not currently mounted
 
             const cleanedRows = guidelinesDraft[category].filter(r => r.title.trim());
             const payload = {
