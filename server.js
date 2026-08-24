@@ -6,17 +6,14 @@ const fs = require('fs');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-const clientId = process.env.DISCORD_CLIENT_ID;
-const clientSecret = process.env.DISCORD_CLIENT_SECRET;
-const redirectUri = process.env.DISCORD_REDIRECT_URI;
+const DATA_FILE = path.join(__dirname, 'data.json');
 
-const {
-  DISCORD_CLIENT_ID,
-  DISCORD_CLIENT_SECRET,
-  DISCORD_REDIRECT_URI,
-  SESSION_SECRET,
-  SITE_URL,
-} = process.env;
+// Pull environment variables with fallback defaults
+const DISCORD_CLIENT_ID = process.env.DISCORD_CLIENT_ID || process.env.CLIENT_ID;
+const DISCORD_CLIENT_SECRET = process.env.DISCORD_CLIENT_SECRET || process.env.CLIENT_SECRET;
+const DISCORD_REDIRECT_URI = process.env.DISCORD_REDIRECT_URI || 'https://www.nrcrblx.xyz/auth/discord/callback';
+const SESSION_SECRET = process.env.SESSION_SECRET || 'change-me-in-.env';
+const SITE_URL = process.env.SITE_URL || 'https://www.nrcrblx.xyz';
 
 const ADMIN_USERNAMES = ['bblego4', 'llucasxxx', 'devin_920'].map(u => u.toLowerCase());
 
@@ -32,7 +29,7 @@ function writeData(data) {
 app.use(express.json());
 app.use(
   session({
-    secret: SESSION_SECRET || 'change-me-in-.env',
+    secret: SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
     cookie: {
@@ -43,7 +40,7 @@ app.use(
   })
 );
 
-// Serve static assets from the root directory as well as 'public' if used
+// Serve static assets from root and public
 app.use(express.static(__dirname));
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -58,13 +55,17 @@ function requireAdmin(req, res, next) {
   next();
 }
 
-// Explicit Root Route to serve index.html
+// Explicit Root Route
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'index.html'));
 });
 
 // OAuth Routes
 app.get('/auth/discord', (req, res) => {
+  if (!DISCORD_CLIENT_ID) {
+    return res.status(500).json({ error: 'DISCORD_CLIENT_ID is missing from server environment.' });
+  }
+
   const params = new URLSearchParams({
     client_id: DISCORD_CLIENT_ID,
     redirect_uri: DISCORD_REDIRECT_URI,
