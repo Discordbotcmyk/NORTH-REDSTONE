@@ -6,7 +6,9 @@ const fs = require('fs');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-const DATA_FILE = path.join(__dirname, 'data.json');
+const clientId = process.env.DISCORD_CLIENT_ID;
+const clientSecret = process.env.DISCORD_CLIENT_SECRET;
+const redirectUri = process.env.DISCORD_REDIRECT_URI;
 
 const {
   DISCORD_CLIENT_ID,
