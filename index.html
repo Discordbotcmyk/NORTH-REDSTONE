@@ -958,18 +958,8 @@
 
     <script>
 
-        // ------------------------------------------------------------------
-        // Section navigation
-        // ------------------------------------------------------------------
-
         async function showSection(sectionId) {
             if (sectionId === 'adminpanel') {
-                // Never trust the in-memory `currentSession` object to decide
-                // whether to reveal the admin panel — it's an ordinary JS
-                // variable sitting in page scope, and anyone can open devtools
-                // and run `currentSession.isAdmin = true` before clicking this
-                // link. The server's answer, fetched fresh right now, is the
-                // only thing worth trusting.
                 try {
                     const res = await fetch('/api/session');
                     currentSession = await res.json();
@@ -1061,11 +1051,6 @@
             return res.json();
         }
 
-        // ------------------------------------------------------------------
-        // Session watcher: 30-minute idle timeout with a heads-up toast and
-        // an auto-logout-with-notice when it actually expires.
-        // ------------------------------------------------------------------
-
         let sessionExpiresAt = null;
         let heartbeatIntervalId = null;
         let sessionWarnTimeoutId = null;
@@ -1105,8 +1090,7 @@
             if (!sessionExpiresAt) return;
 
             const msLeft = sessionExpiresAt - Date.now();
-            const warnMsBefore = 60 * 1000; // heads-up ~1 minute before expiry
-
+            const warnMsBefore = 60 * 1000;
             if (msLeft > warnMsBefore) {
                 sessionWarnTimeoutId = setTimeout(() => {
                     showSessionToast('Heads up', 'Your session will expire in about a minute due to inactivity.', 'warning');
@@ -1117,9 +1101,7 @@
         }
 
         async function handleSessionExpired() {
-            // Confirm with the server rather than just trusting the client
-            // clock — if there was genuine activity recently, the heartbeat
-            // below may have already pushed the real expiry out.
+
             let stillLoggedIn = false;
             try {
                 const res = await fetch('/api/session');
@@ -1148,11 +1130,6 @@
             sessionExpiresAt = expiresAt;
             scheduleSessionTimers();
 
-            // Every minute, if there's been genuine activity in the last two
-            // minutes, ping the server so the real session (and these timers)
-            // extend along with real usage. If the tab is just sitting open
-            // untouched, this stays silent and the 30-minute clock keeps
-            // counting down toward handleSessionExpired().
             heartbeatIntervalId = setInterval(async () => {
                 if (Date.now() - lastActivityAt > 2 * 60 * 1000) return;
                 try {
@@ -1167,10 +1144,6 @@
                 } catch (e) { /* ignore transient network errors */ }
             }, 60 * 1000);
         }
-
-        // ------------------------------------------------------------------
-        // Change logs
-        // ------------------------------------------------------------------
 
         let changelogsCache = [];
 
@@ -1293,10 +1266,6 @@
             }
         }
 
-        // ------------------------------------------------------------------
-        // Guidelines (public rendering)
-        // ------------------------------------------------------------------
-
         let guidelinesCache = { game: [], discord: [] };
 
         async function loadGuidelines() {
@@ -1308,9 +1277,6 @@
             }
             renderGuidelinesPublic('game', 'gameGuidelinesWrapper');
             renderGuidelinesPublic('discord', 'discordGuidelinesWrapper');
-            // NOTE: the editor for these (admin-only) is intentionally NOT
-            // rendered here. It's only built by renderAdminPanel(), which is
-            // only called after a fresh, server-verified isAdmin check.
         }
 
         function renderGuidelinesPublic(category, wrapperId) {
@@ -1327,20 +1293,11 @@
             `).join('');
         }
 
-        // ------------------------------------------------------------------
-        // Admin panel — markup is built here, on demand, only once an admin
-        // session has been freshly confirmed by the server. Nothing in this
-        // section exists in the page's static HTML.
-        // ------------------------------------------------------------------
-
         let guidelinesDraft = { game: [], discord: [] };
 
         async function renderAdminPanel() {
             const container = document.getElementById('adminPanelContent');
 
-            // Belt-and-braces: even though showSection() already checked,
-            // don't build the editable admin markup unless we're holding a
-            // freshly-confirmed admin session.
             if (!currentSession.isAdmin) {
                 container.innerHTML = '<div class="access-denied-box">You do not have access to this page.</div>';
                 return;
@@ -1400,7 +1357,7 @@
         function drawGuidelineRows(category) {
             const editorId = category === 'game' ? 'gameGuidelinesEditor' : 'discordGuidelinesEditor';
             const editor = document.getElementById(editorId);
-            if (!editor) return; // admin panel markup not currently mounted
+            if (!editor) return;
             const rows = guidelinesDraft[category];
 
             editor.innerHTML = rows.map((r, i) => `
@@ -1431,7 +1388,7 @@
         async function saveGuidelines(category) {
             const statusId = category === 'game' ? 'gameGuidelinesStatus' : 'discordGuidelinesStatus';
             const statusEl = document.getElementById(statusId);
-            if (!statusEl) return; // admin panel markup not currently mounted
+            if (!statusEl) return;
 
             const cleanedRows = guidelinesDraft[category].filter(r => r.title.trim());
             const payload = {
