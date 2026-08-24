@@ -13,7 +13,7 @@ const DISCORD_CLIENT_ID = process.env.DISCORD_CLIENT_ID || process.env.CLIENT_ID
 const DISCORD_CLIENT_SECRET = process.env.DISCORD_CLIENT_SECRET || process.env.CLIENT_SECRET;
 const SESSION_SECRET = process.env.SESSION_SECRET || 'change-me-in-.env';
 
-const ADMIN_USERNAMES = ['bblego4', 'llucasxxx', 'devin_920'].map(u => u.toLowerCase());
+const ADMIN_USERNAMES = ['bblego4', 'llucasxxx', 'devin_920', 'itskingjackson'].map(u => u.toLowerCase());
 
 // IMPORTANT: the app runs behind a reverse proxy (Render/Heroku/etc. — that's
 // why getRedirectUri() reads x-forwarded-proto/x-forwarded-host). Without this,
