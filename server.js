@@ -11,9 +11,7 @@ const DATA_FILE = path.join(__dirname, 'data.json');
 // Pull environment variables with fallback defaults
 const DISCORD_CLIENT_ID = process.env.DISCORD_CLIENT_ID || process.env.CLIENT_ID;
 const DISCORD_CLIENT_SECRET = process.env.DISCORD_CLIENT_SECRET || process.env.CLIENT_SECRET;
-const DISCORD_REDIRECT_URI = process.env.DISCORD_REDIRECT_URI || 'https://www.nrcrblx.xyz/auth/discord/callback';
 const SESSION_SECRET = process.env.SESSION_SECRET || 'change-me-in-.env';
-const SITE_URL = process.env.SITE_URL || 'https://www.nrcrblx.xyz';
 
 const ADMIN_USERNAMES = ['bblego4', 'llucasxxx', 'devin_920'].map(u => u.toLowerCase());
 
@@ -23,6 +21,13 @@ function readData() {
 
 function writeData(data) {
   fs.writeFileSync(DATA_FILE, JSON.stringify(data, null, 2), 'utf-8');
+}
+
+// Helper function to build exact redirect_uri based on current request
+function getRedirectUri(req) {
+  const protocol = req.headers['x-forwarded-proto'] || req.protocol;
+  const host = req.headers['x-forwarded-host'] || req.get('host');
+  return `${protocol}://${host}/auth/discord/callback`;
 }
 
 // Middleware
@@ -66,9 +71,11 @@ app.get('/auth/discord', (req, res) => {
     return res.status(500).json({ error: 'DISCORD_CLIENT_ID is missing from server environment.' });
   }
 
+  const redirectUri = getRedirectUri(req);
+
   const params = new URLSearchParams({
     client_id: DISCORD_CLIENT_ID,
-    redirect_uri: DISCORD_REDIRECT_URI,
+    redirect_uri: redirectUri,
     response_type: 'code',
     scope: 'identify',
   });
@@ -79,6 +86,8 @@ app.get('/auth/discord/callback', async (req, res) => {
   const { code } = req.query;
   if (!code) return res.redirect('/?login=failed');
 
+  const redirectUri = getRedirectUri(req);
+
   try {
     const tokenRes = await fetch('https://discord.com/api/oauth2/token', {
       method: 'POST',
@@ -88,10 +97,16 @@ app.get('/auth/discord/callback', async (req, res) => {
         client_secret: DISCORD_CLIENT_SECRET,
         grant_type: 'authorization_code',
         code,
-        redirect_uri: DISCORD_REDIRECT_URI,
+        redirect_uri: redirectUri,
       }),
     });
-    if (!tokenRes.ok) throw new Error('Token exchange failed');
+
+    if (!tokenRes.ok) {
+      const errorDetails = await tokenRes.text();
+      console.error('Discord Token Exchange Error Details:', errorDetails);
+      throw new Error(`Token exchange failed with status ${tokenRes.status}`);
+    }
+
     const tokenData = await tokenRes.json();
 
     const userRes = await fetch('https://discord.com/api/users/@me', {
@@ -107,7 +122,7 @@ app.get('/auth/discord/callback', async (req, res) => {
       isAdmin: isAdminUser(discordUser),
     };
 
-    res.redirect(SITE_URL || '/');
+    res.redirect('/');
   } catch (err) {
     console.error('Discord OAuth error:', err);
     res.redirect('/?login=failed');
