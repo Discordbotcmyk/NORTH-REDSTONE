@@ -1,137 +1,1617 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Site Under Maintenance</title>
-<style>
-  :root {
-    --ink: #1b1f23;
-    --paper: #f6f5f2;
-    --line: #d8d5cd;
-    --amber: #b5793a;
-    --amber-dim: #8a5f2c;
-  }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>North Redstone Community</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #0a0a0a;
+            --bg-nav: rgba(17, 17, 17, 0.82);
+            --bg-card: #141414;
+            --bg-card-hover: #1a1a1a;
+            --accent-orange: #ff7a1a;
+            --accent-yellow: #ffb84d;
+            --text-white: #ffffff;
+            --text-gray: #9a9a9a;
+            --text-gray-dim: #6e6e6e;
+            --border-color: #242424;
+            --discord-blurple: #5865F2;
+        }
 
-  * { box-sizing: border-box; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+        }
 
-  html, body {
-    height: 100%;
-    margin: 0;
-  }
+        body {
+            background-color: var(--bg-dark);
+            background-image:
+                radial-gradient(ellipse 900px 500px at 50% -10%, rgba(255, 122, 26, 0.10), transparent 60%);
+            color: var(--text-white);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
 
-  body {
-    background: var(--paper);
-    color: var(--ink);
-    font-family: "Courier New", ui-monospace, SFMono-Regular, Menlo, monospace;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 24px;
-    line-height: 1.5;
-  }
+        header {
+            background-color: transparent;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: none;
+            padding: 1.25rem 1.5rem 0.5rem;
+        }
 
-  .panel {
-    max-width: 560px;
-    width: 100%;
-    border: 1px solid var(--line);
-    background: #fff;
-    box-shadow: 0 1px 0 var(--line);
-  }
+        nav {
+            width: fit-content;
+            max-width: 95vw;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 1rem 2.25rem 1.15rem;
+            gap: 0.7rem;
+            background: var(--bg-nav);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border: 1px solid var(--border-color);
+            border-radius: 26px;
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45);
+        }
 
-  .bar {
-    background: repeating-linear-gradient(
-      45deg,
-      var(--amber),
-      var(--amber) 10px,
-      #2a2a2a 10px,
-      #2a2a2a 20px
-    );
-    height: 8px;
-  }
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+        }
 
-  .content {
-    padding: 40px 36px 36px;
-  }
+        .logo-container img {
+            height: 32px;
+            width: 32px;
+            border-radius: 9px;
+            object-fit: cover;
+        }
 
-  .status-row {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 24px;
-  }
+        .logo-text {
+            font-size: 1.05rem;
+            font-weight: 800;
+            color: var(--text-white);
+            letter-spacing: 0.2px;
+        }
 
-  .dot {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    background: var(--amber);
-    flex-shrink: 0;
-    animation: pulse 1.8s ease-in-out infinite;
-  }
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 1.5rem;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            width: 100%;
+            padding-top: 0.65rem;
+            border-top: 1px solid var(--border-color);
+        }
 
-  @media (prefers-reduced-motion: reduce) {
-    .dot { animation: none; }
-  }
+        .nav-links a {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--text-gray);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.83rem;
+            white-space: nowrap;
+            transition: color 0.2s;
+            cursor: pointer;
+        }
 
-  @keyframes pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.35; }
-  }
+        .nav-links a svg {
+            width: 15px;
+            height: 15px;
+            flex-shrink: 0;
+            opacity: 0.75;
+            transition: opacity 0.2s;
+        }
 
-  .status-label {
-    text-transform: uppercase;
-    letter-spacing: 0.12em;
-    font-size: 12px;
-    color: var(--amber-dim);
-    font-weight: 700;
-  }
+        .nav-links a[href*="discord.gg/jEeuvTu4Ae"] svg {
+            width: 17px;
+            height: 13.6px;
+        }
 
-  h1 {
-    font-size: 22px;
-    margin: 0 0 20px;
-    letter-spacing: -0.01em;
-  }
+        .nav-links a:hover, .nav-links a.active {
+            color: var(--text-white);
+        }
 
-  p.message {
-    font-size: 14px;
-    color: #333;
-    margin: 0 0 16px;
-    white-space: pre-wrap;
-  }
+        .nav-links a:hover svg, .nav-links a.active svg {
+            opacity: 1;
+        }
 
-  .footer {
-    margin-top: 28px;
-    padding-top: 20px;
-    border-top: 1px dashed var(--line);
-    font-size: 12px;
-    color: #777;
-  }
+        #adminNavLink {
+            padding-left: 1.5rem;
+            border-left: 1px solid var(--border-color);
+        }
 
-  .footer a {
-    color: var(--amber-dim);
-  }
-</style>
+        #adminNavLink a {
+            background: rgba(255, 122, 26, 0.12);
+            border: 1px solid rgba(255, 122, 26, 0.35);
+            color: var(--accent-yellow);
+            padding: 0.4rem 0.9rem;
+            border-radius: 999px;
+        }
+
+        #adminNavLink a svg {
+            opacity: 1;
+        }
+
+        #adminNavLink a:hover {
+            color: var(--text-white);
+            border-color: var(--accent-orange);
+        }
+
+        .btn-play {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            background: linear-gradient(135deg, var(--accent-orange), var(--accent-yellow));
+            color: #000 !important;
+            padding: 0.85rem 1.9rem;
+            border-radius: 999px;
+            font-weight: 800 !important;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 0.3px;
+            box-shadow: 0 8px 24px rgba(255, 122, 26, 0.28);
+            transition: transform 0.2s, box-shadow 0.2s !important;
+            text-decoration: none;
+        }
+
+        .btn-play svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        .btn-play:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 28px rgba(255, 122, 26, 0.42);
+        }
+
+        .account-area {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            flex-shrink: 0;
+        }
+
+        .btn-discord-login {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.55rem;
+            background-color: var(--discord-blurple);
+            color: #fff !important;
+            padding: 0.55rem 1.15rem;
+            border-radius: 999px;
+            font-weight: 700 !important;
+            font-size: 0.85rem;
+            text-decoration: none;
+            transition: filter 0.2s, transform 0.2s;
+        }
+
+        .btn-discord-login:hover {
+            filter: brightness(1.12);
+            transform: translateY(-1px);
+        }
+
+        .btn-discord-login svg {
+            width: 19px;
+            height: 15.2px;
+            fill: #fff;
+            flex-shrink: 0;
+        }
+
+        .welcome-text {
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: var(--text-gray);
+        }
+
+        .welcome-text span {
+            color: var(--text-white);
+            font-weight: 700;
+        }
+
+        .btn-logout {
+            color: var(--text-gray-dim) !important;
+            font-size: 0.78rem !important;
+            font-weight: 600 !important;
+            text-decoration: underline;
+        }
+
+        .container {
+            max-width: 1180px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+            flex: 1;
+            width: 100%;
+        }
+
+        .page-section {
+            display: none;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .page-section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .hero {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            gap: 1.5rem;
+            padding: 3.5rem 0 1rem;
+            max-width: 780px;
+            margin: 0 auto;
+        }
+
+        .hero-title {
+            font-size: clamp(2.4rem, 6vw, 4.2rem);
+            font-weight: 900;
+            line-height: 1.06;
+            letter-spacing: -1px;
+        }
+
+        .hero-title span {
+            color: var(--accent-orange);
+            background: linear-gradient(45deg, var(--accent-orange), var(--accent-yellow));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-desc {
+            color: var(--text-gray);
+            font-size: 1.05rem;
+            line-height: 1.7;
+            max-width: 620px;
+        }
+
+        .founder-note {
+            color: var(--text-gray-dim);
+            font-size: 0.9rem;
+            line-height: 1.6;
+            max-width: 560px;
+        }
+
+        .hero-banner-wrap {
+            max-width: 900px;
+            margin: 2.5rem auto 0;
+        }
+
+        .hero-banner {
+            width: 100%;
+            border-radius: 18px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.55);
+            object-fit: cover;
+            max-height: 420px;
+            display: block;
+        }
+
+        .section-heading {
+            margin-top: 3.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--text-white);
+            font-size: 1.5rem;
+            font-weight: 800;
+            text-align: center;
+        }
+
+        .section-heading .accent-dot {
+            color: var(--accent-orange);
+        }
+
+        .feature-gallery {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.25rem;
+            margin: 0 0 2rem;
+        }
+
+        .feature-gallery img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 14px;
+            border: 1px solid var(--border-color);
+            transition: transform 0.3s, border-color 0.3s;
+        }
+
+        .feature-gallery img:hover {
+            transform: translateY(-4px);
+            border-color: var(--accent-orange);
+        }
+
+        .notice-box {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-left: 3px solid var(--accent-yellow);
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            font-size: 0.9rem;
+            color: #d1d1d1;
+        }
+
+        .notice-icon {
+            font-size: 1.3rem;
+            color: var(--accent-yellow);
+        }
+
+        .dmca-box {
+            background-color: rgba(217, 4, 41, 0.10);
+            border: 1px solid rgba(217, 4, 41, 0.4);
+            border-left: 4px solid #d90429;
+            padding: 1.2rem;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .dmca-box img {
+            height: 46px;
+            width: auto;
+            border-radius: 6px;
+        }
+
+        .dmca-text {
+            color: #ff8fa3;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .filter-container {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            margin-bottom: 2rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            padding: 0.9rem 1.2rem;
+            border-radius: 14px;
+        }
+
+        .filter-container select {
+            background: var(--bg-dark);
+            color: var(--text-white);
+            border: 1px solid var(--border-color);
+            padding: 0.5rem 1rem;
+            border-radius: 999px;
+            outline: none;
+            font-size: 0.85rem;
+        }
+
+        .changelog-header {
+            display: flex;
+            align-items: center;
+            gap: 1.25rem;
+            margin-bottom: 2rem;
+        }
+
+        .changelog-header img {
+            height: 54px;
+            width: 54px;
+            border-radius: 14px;
+            object-fit: cover;
+        }
+
+        .log-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-bottom: 1.25rem;
+            transition: border-color 0.2s;
+        }
+
+        .log-card:hover {
+            border-color: #333333;
+        }
+
+        .log-title-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 0.8rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .log-title {
+            color: var(--text-white);
+            font-size: 1.15rem;
+            font-weight: 800;
+        }
+
+        .log-date {
+            color: var(--accent-yellow);
+            font-size: 0.85rem;
+            font-weight: 700;
+            background: rgba(255, 184, 77, 0.1);
+            border: 1px solid rgba(255, 184, 77, 0.25);
+            padding: 0.3rem 0.8rem;
+            border-radius: 999px;
+        }
+
+        .log-content ul {
+            list-style: none;
+            display: grid;
+            gap: 0.5rem;
+        }
+
+        .log-content li {
+            position: relative;
+            padding-left: 1.4rem;
+            color: #c9c9c9;
+            font-size: 0.92rem;
+        }
+
+        .log-content li::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 0.5rem;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--accent-orange);
+        }
+
+        .log-note {
+            margin-top: 1rem;
+            background: rgba(255, 184, 77, 0.06);
+            border: 1px solid rgba(255, 184, 77, 0.2);
+            padding: 0.7rem 1rem;
+            border-radius: 10px;
+            font-size: 0.88rem;
+            color: #e8d8b8;
+        }
+
+        .log-admin-controls {
+            margin-top: 1.2rem;
+            padding-top: 1rem;
+            border-top: 1px dashed var(--border-color);
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+        }
+
+        .log-admin-controls textarea {
+            width: 100%;
+            background: var(--bg-dark);
+            border: 1px solid var(--border-color);
+            color: var(--text-white);
+            padding: 0.6rem;
+            border-radius: 10px;
+            font-size: 0.85rem;
+            min-height: 50px;
+            resize: vertical;
+        }
+
+        .log-admin-buttons {
+            display: flex;
+            gap: 0.6rem;
+        }
+
+        .btn-small {
+            padding: 0.45rem 1rem;
+            font-size: 0.72rem;
+            border-radius: 999px;
+            border: none;
+            cursor: pointer;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        .btn-small.save-note {
+            background: var(--accent-yellow);
+            color: #000;
+        }
+
+        .btn-small.delete-log {
+            background: transparent;
+            border: 1px solid #d90429;
+            color: #ff8fa3;
+        }
+
+        .btn-small:hover {
+            filter: brightness(1.1);
+        }
+
+        .guidelines-section {
+            margin-bottom: 2.5rem;
+        }
+
+        .guidelines-section h2 {
+            font-size: 1.3rem;
+            margin-bottom: 1.2rem;
+            color: var(--text-white);
+            border-bottom: none;
+            padding-bottom: 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 800;
+        }
+
+        .guidelines-section h2::before {
+            content: "";
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--accent-orange);
+            display: inline-block;
+        }
+
+        .rule-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            padding: 1rem 1.2rem;
+            border-radius: 12px;
+            margin-bottom: 0.7rem;
+            transition: border-color 0.2s;
+        }
+
+        .rule-card:hover {
+            border-color: var(--accent-yellow);
+        }
+
+        .rule-card p {
+            color: var(--text-gray);
+            font-size: 0.92rem;
+            line-height: 1.5;
+        }
+
+        .rule-card p strong {
+            color: var(--text-white);
+        }
+
+        .about-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 18px;
+            padding: 2rem;
+            font-size: 1rem;
+            line-height: 1.8;
+            color: #cfcfcf;
+            max-width: 800px;
+        }
+
+        .credits-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .credit-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: transform 0.25s, border-color 0.25s;
+        }
+
+        .credit-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--accent-orange);
+        }
+
+        .avatar-frame {
+            width: 88px;
+            height: 88px;
+            border-radius: 50%;
+            border: 2px solid var(--border-color);
+            margin: 0 auto 1rem;
+            overflow: hidden;
+        }
+
+        .avatar-frame img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .person-name {
+            font-size: 1.05rem;
+            font-weight: 700;
+        }
+
+        .person-role {
+            color: var(--accent-orange);
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin: 0.25rem 0;
+        }
+
+        .person-username {
+            color: var(--text-gray-dim);
+            font-size: 0.78rem;
+        }
+
+        .credits-note {
+            margin-top: 3rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            padding: 1.4rem;
+            border-radius: 16px;
+            text-align: center;
+            color: var(--text-gray);
+            font-style: italic;
+            font-size: 0.9rem;
+        }
+
+        .admin-banner {
+            background: rgba(88, 101, 242, 0.08);
+            border: 1px solid rgba(88, 101, 242, 0.35);
+            border-left: 4px solid var(--discord-blurple);
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            font-size: 0.9rem;
+            color: #c7cbfa;
+        }
+
+        .admin-panel-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+
+        .admin-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 18px;
+            padding: 1.5rem;
+        }
+
+        .admin-card h3 {
+            color: var(--text-white);
+            margin-bottom: 1rem;
+            font-size: 1.05rem;
+        }
+
+        .admin-card label {
+            display: block;
+            font-size: 0.82rem;
+            color: var(--text-gray);
+            margin-bottom: 0.3rem;
+            margin-top: 1rem;
+        }
+
+        .admin-card input[type="text"],
+        .admin-card input[type="date"],
+        .admin-card textarea {
+            width: 100%;
+            background: var(--bg-dark);
+            border: 1px solid var(--border-color);
+            color: var(--text-white);
+            padding: 0.6rem 0.8rem;
+            border-radius: 10px;
+            font-size: 0.88rem;
+            outline: none;
+        }
+
+        .admin-card input[type="text"]:focus,
+        .admin-card input[type="date"]:focus,
+        .admin-card textarea:focus {
+            border-color: var(--accent-orange);
+        }
+
+        .admin-card textarea {
+            min-height: 100px;
+            resize: vertical;
+            font-family: 'Inter', monospace;
+        }
+
+        .btn-admin {
+            margin-top: 1.2rem;
+            background: linear-gradient(135deg, var(--accent-orange), var(--accent-yellow));
+            color: #000;
+            border: none;
+            padding: 0.7rem 1.4rem;
+            border-radius: 999px;
+            font-weight: 800;
+            cursor: pointer;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 0.3px;
+        }
+
+        .btn-admin.secondary {
+            background: var(--bg-dark);
+            color: var(--text-white);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-admin:hover {
+            filter: brightness(1.12);
+        }
+
+        .guideline-edit-row {
+            display: grid;
+            grid-template-columns: 1fr 2fr auto;
+            gap: 0.6rem;
+            margin-bottom: 0.6rem;
+            align-items: start;
+        }
+
+        .guideline-edit-row input,
+        .guideline-edit-row textarea {
+            background: var(--bg-dark);
+            border: 1px solid var(--border-color);
+            color: var(--text-white);
+            padding: 0.5rem;
+            border-radius: 8px;
+            font-size: 0.85rem;
+        }
+
+        .guideline-edit-row textarea {
+            min-height: 44px;
+            resize: vertical;
+        }
+
+        .btn-remove-row {
+            background: transparent;
+            border: 1px solid #d90429;
+            color: #ff8fa3;
+            border-radius: 8px;
+            padding: 0.4rem 0.6rem;
+            cursor: pointer;
+            font-size: 0.78rem;
+        }
+
+        .admin-status {
+            margin-top: 0.8rem;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .admin-status.success { color: #4ade80; }
+        .admin-status.error { color: #f87171; }
+
+        .subtle-note {
+            color: var(--text-gray-dim);
+            font-size: 0.8rem;
+            margin-top: 0.3rem;
+        }
+
+        .access-denied-box {
+            background-color: var(--bg-card);
+            border: 1px solid #d90429;
+            border-left: 4px solid #d90429;
+            padding: 2rem;
+            border-radius: 16px;
+            color: #ff8fa3;
+            text-align: center;
+        }
+
+        .loading-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(10, 10, 10, 0.92);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .spinner {
+            width: 44px;
+            height: 44px;
+            border: 4px solid var(--border-color);
+            border-top: 4px solid var(--accent-orange);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 1.5rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--text-white);
+            text-align: center;
+        }
+
+        .session-toast {
+            display: none;
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            max-width: 340px;
+            background: var(--bg-card);
+            border: 1px solid var(--accent-yellow);
+            border-left: 4px solid var(--accent-yellow);
+            color: var(--text-white);
+            padding: 1rem 1.2rem;
+            border-radius: 14px;
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.55);
+            z-index: 3000;
+            font-size: 0.88rem;
+            line-height: 1.4;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .session-toast.warning {
+            border-color: var(--accent-yellow);
+        }
+
+        .session-toast.expired {
+            border-color: #d90429;
+        }
+
+        .session-toast strong {
+            display: block;
+            margin-bottom: 0.3rem;
+        }
+
+        footer {
+            background-color: transparent;
+            border-top: 1px solid var(--border-color);
+            padding: 2rem 0;
+            text-align: center;
+            color: var(--text-gray-dim);
+            font-size: 0.82rem;
+            margin-top: auto;
+        }
+
+        @media (max-width: 640px) {
+            .feature-gallery { grid-template-columns: 1fr; }
+            nav { border-radius: 20px; }
+        }
+    </style>
 </head>
 <body>
 
-  <main class="panel" role="main" aria-labelledby="maint-heading">
-    <div class="bar" aria-hidden="true"></div>
-    <div class="content">
-      <div class="status-row">
-        <span class="dot" aria-hidden="true"></span>
-        <span class="status-label">Maintenance In Progress</span>
-      </div>
+    <header>
+        <nav>
+            <div class="logo-container" onclick="showSection('home')">
+                <img src="https://cdn.discordapp.com/attachments/1482464929654247634/1541584653654302831/image.png?ex=6a8e2016&is=6a8cce96&hm=f087af4fade5a2780625cc838f02e728cd7a62b9c1d1401015acd576fc471049&" alt="NRC Logo">
+                <span class="logo-text">NORTH REDSTONE</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="https://discord.gg/YM8KWZP6cM" target="_blank"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 10v4M15 10v4M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18Z"/></svg>Appeals</a></li>
+                <li><a onclick="showSection('about')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 16v-4M12 8h.01"/></svg>About NRC</a></li>
+                <li><a onclick="showApplicationsLoading()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h6"/></svg>Applications</a></li>
+                <li><a onclick="showSection('changelogs')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>Game Change Logs</a></li>
+                <li><a href="https://discord.gg/jEeuvTu4Ae" target="_blank"><svg viewBox="0 0 640 512" fill="currentColor"><path d="M524.531,69.836a1.5,1.5,0,0,0-.764-.7A485.065,485.065,0,0,0,404.081,32.03a1.816,1.816,0,0,0-1.923.91,337.461,337.461,0,0,0-14.9,30.6,447.848,447.848,0,0,0-134.426,0,309.541,309.541,0,0,0-15.135-30.6,1.89,1.89,0,0,0-1.924-.91A483.689,483.689,0,0,0,116.085,69.137a1.712,1.712,0,0,0-.788.676C39.068,183.651,18.186,294.69,28.43,404.354a2.016,2.016,0,0,0,.765,1.375A487.666,487.666,0,0,0,176.02,479.918a1.9,1.9,0,0,0,2.063-.676A348.2,348.2,0,0,0,208.12,430.4a1.86,1.86,0,0,0-1.019-2.588,321.173,321.173,0,0,1-45.868-21.853,1.885,1.885,0,0,1-.185-3.126c3.082-2.309,6.166-4.711,9.109-7.137a1.819,1.819,0,0,1,1.9-.256c96.229,43.917,200.41,43.917,295.5,0a1.812,1.812,0,0,1,1.924.233c2.944,2.426,6.027,4.851,9.132,7.16a1.884,1.884,0,0,1-.162,3.126,301.407,301.407,0,0,1-45.89,21.83,1.875,1.875,0,0,0-1,2.611,391.055,391.055,0,0,0,30.014,48.815,1.864,1.864,0,0,0,2.063.7A486.048,486.048,0,0,0,610.7,405.729a1.882,1.882,0,0,0,.765-1.352C623.729,277.594,590.933,167.465,524.531,69.836ZM222.491,337.58c-28.972,0-52.844-26.587-52.844-59.239S193.056,219.1,222.491,219.1c29.665,0,53.306,26.82,52.843,59.239C275.334,310.993,251.924,337.58,222.491,337.58Zm195.38,0c-28.973,0-52.845-26.587-52.845-59.239S388.437,219.1,417.871,219.1c29.667,0,53.307,26.82,52.845,59.239C470.716,310.993,447.538,337.58,417.871,337.58Z"/></svg>Discord Server</a></li>
+                <li><a onclick="showSection('guidelines')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z"/></svg>Community Guidelines</a></li>
+                <li><a onclick="showSection('credits')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>Credits</a></li>
+                <li id="adminNavLink" style="display:none;"><a onclick="showSection('adminpanel')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 4 5v6c0 5.25 3.5 9.74 8 11 4.5-1.26 8-5.75 8-11V5Z"/></svg>Administrator Panel</a></li>
+            </ul>
+        </nav>
+    </header>
 
-      <h1 id="maint-heading">This site is temporarily offline</h1>
+    <div class="container">
 
-      <p class="message">Greetings! Developer of this website was informed of a vulnerability by an ownership member of NRC. This site is down for maintenance. The site will be down till vulnerability is resolved. If you have any issues contact the site manager llucasxxx</p>
+        <div id="home" class="page-section active">
+            <div class="hero">
+                <h1 class="hero-title">NORTH REDSTONE <span>COUNTY JAIL</span></h1>
+                <p class="hero-desc">Experience an immersive roleplay setting in North Redstone County Jail. Choose your path, follow the rules, and make your mark in our growing community.</p>
+                <a href="https://www.roblox.com/games/106333511801260/North-Redstone-County-Jail" target="_blank" class="btn-play">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                    Play Game
+                </a>
+                <div class="account-area" id="accountArea">
+                    <a href="/auth/discord" class="btn-discord-login" id="discordLoginBtn">
+                        <svg viewBox="0 0 640 512" xmlns="http://www.w3.org/2000/svg"><path d="M524.531,69.836a1.5,1.5,0,0,0-.764-.7A485.065,485.065,0,0,0,404.081,32.03a1.816,1.816,0,0,0-1.923.91,337.461,337.461,0,0,0-14.9,30.6,447.848,447.848,0,0,0-134.426,0,309.541,309.541,0,0,0-15.135-30.6,1.89,1.89,0,0,0-1.924-.91A483.689,483.689,0,0,0,116.085,69.137a1.712,1.712,0,0,0-.788.676C39.068,183.651,18.186,294.69,28.43,404.354a2.016,2.016,0,0,0,.765,1.375A487.666,487.666,0,0,0,176.02,479.918a1.9,1.9,0,0,0,2.063-.676A348.2,348.2,0,0,0,208.12,430.4a1.86,1.86,0,0,0-1.019-2.588,321.173,321.173,0,0,1-45.868-21.853,1.885,1.885,0,0,1-.185-3.126c3.082-2.309,6.166-4.711,9.109-7.137a1.819,1.819,0,0,1,1.9-.256c96.229,43.917,200.41,43.917,295.5,0a1.812,1.812,0,0,1,1.924.233c2.944,2.426,6.027,4.851,9.132,7.16a1.884,1.884,0,0,1-.162,3.126,301.407,301.407,0,0,1-45.89,21.83,1.875,1.875,0,0,0-1,2.611,391.055,391.055,0,0,0,30.014,48.815,1.864,1.864,0,0,0,2.063.7A486.048,486.048,0,0,0,610.7,405.729a1.882,1.882,0,0,0,.765-1.352C623.729,277.594,590.933,167.465,524.531,69.836ZM222.491,337.58c-28.972,0-52.844-26.587-52.844-59.239S193.056,219.1,222.491,219.1c29.665,0,53.306,26.82,52.843,59.239C275.334,310.993,251.924,337.58,222.491,337.58Zm195.38,0c-28.973,0-52.845-26.587-52.845-59.239S388.437,219.1,417.871,219.1c29.667,0,53.307,26.82,52.845,59.239C470.716,310.993,447.538,337.58,417.871,337.58Z"/></svg>
+                        Login with Discord
+                    </a>
+                </div>
+                <p class="founder-note">bblego4 Is the founder of North Redstone Community in March 1st 2026. The community consisted of multiple individuals that assisted. Which the users can be seen in credits.</p>
 
-      <div class="footer">
-        Thank you for your patience while this is addressed.
-      </div>
+                <div class="hero-banner-wrap">
+                    <img src="https://cdn.discordapp.com/attachments/1482464929654247634/1541586226300194956/image.png?ex=6a8e218d&is=6a8cd00d&hm=60957b5d2c304b9ff2dfe4d83d48e6b1b7362390e5e3a3b4814f9a90e06da767&" class="hero-banner" alt="Cell Block Overview">
+                </div>
+            </div>
+
+            <h2 class="section-heading">Game Areas</h2>
+            <div class="feature-gallery">
+                <img src="https://cdn.discordapp.com/attachments/1482464929654247634/1541586268574584893/image.png?ex=6a8e2197&is=6a8cd017&hm=d073be57b0ffc8ba6b31c86daf3410e1df50dfe0021835300549695efbe5059e&" alt="Jail Cafeteria">
+                <img src="https://cdn.discordapp.com/attachments/1482464929654247634/1541586248106516500/image.png?ex=6a8e2192&is=6a8cd012&hm=51d9b5be72c2bfd37d35a61f335a0b52843820f1047c1f54edb203666270659f&" alt="Exterior Path">
+                <img src="https://cdn.discordapp.com/attachments/1482464929654247634/1541586209367793804/image.png?ex=6a8e2189&is=6a8cd009&hm=4b856ce280900e85a801eb364dc73d63110e9198b4f4bde586d5ce7f255e7dfb&" alt="Cell Block">
+            </div>
+        </div>
+
+        <div id="about" class="page-section">
+            <h1 style="color: var(--text-white); margin-bottom: 1.5rem;">About NRC</h1>
+            <div class="about-card">
+                The North Redstone community was not a full thought idea on how the building would run. The game is a version 1 of County Jail Roleplay. County Jail Roleplay was removed from Roblox due to a false DMCA claim. North Redstone is not an exact copy — it is a reference to version one of the game.
+                <br><br>
+                Owner of the old CJRP (County Jail Roleplay) game: <strong style="color: var(--accent-yellow);">xTheBlockerx</strong>.
+            </div>
+        </div>
+
+        <div id="changelogs" class="page-section">
+            <div class="changelog-header">
+                <img src="https://cdn.discordapp.com/attachments/1482464929654247634/1541584653654302831/image.png?ex=6a8e2016&is=6a8cce96&hm=f087af4fade5a2780625cc838f02e728cd7a62b9c1d1401015acd576fc471049&" alt="NRC Shield Logo">
+                <div>
+                    <h1 style="color: var(--text-white);">Game Change Logs</h1>
+                    <p style="color: var(--text-gray);">Stay updated with the latest updates and bug fixes.</p>
+                </div>
+            </div>
+
+            <div class="filter-container">
+                <label for="sortOrder">Sort Order:</label>
+                <select id="sortOrder" onchange="renderChangelogs()">
+                    <option value="newest">Most Recent to Oldest</option>
+                    <option value="oldest">Oldest to Most Recent</option>
+                </select>
+            </div>
+
+            <div id="logsWrapper">
+                <p class="subtle-note">Loading change logs...</p>
+            </div>
+
+            <div class="notice-box">
+                <span class="notice-icon">⚠️</span>
+                <span><strong>( ! )</strong> | All Bug Reports must be made in the discord. Note: Trying to get staff to fix it and not reporting it will result in moderation.</span>
+            </div>
+        </div>
+
+        <div id="guidelines" class="page-section">
+
+            <div class="dmca-box">
+                <img src="https://cdn.discordapp.com/attachments/1482464929654247634/1540999953642692618/dmca-badge-w250-2x1-04.png?ex=6a8bff8b&is=6a8aae0b&hm=8db48655814a00aa6626fd4e4998e9c55de5692ac23293058369684c6f5577df&" alt="DMCA Badge" style="border-radius: 4px;">
+                <div class="dmca-text">
+                    <strong> All assets presiding to the game or assets presiding to North Redstone community is protected by DMCA (Digital Millennium Copyright Act of 1998). Attempting to steal assets or trying to replica a exact asset of NRC will result in a DMCA violation and may result in court proceedings.
+                </div>
+            </div>
+
+            <div class="guidelines-section">
+                <h2>North Redstone Community Game Guidelines</h2>
+                <div id="gameGuidelinesWrapper">
+                    <p class="subtle-note">Loading guidelines...</p>
+                </div>
+            </div>
+
+            <div class="guidelines-section">
+                <h2>North Redstone Community Discord Guidelines</h2>
+                <div id="discordGuidelinesWrapper">
+                    <p class="subtle-note">Loading guidelines...</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="credits" class="page-section">
+            <h1 style="color: var(--text-white); text-align: center; margin-bottom: 0.5rem;">Community Credits</h1>
+            <p style="color: var(--text-gray); text-align: center;">Meet the team behind North Redstone Community</p>
+
+            <div class="credits-grid">
+                <div class="credit-card">
+                    <div class="avatar-frame">
+                        <img src="https://images-ext-1.discordapp.net/external/V81CxiW3S4PqF9DSl16RpmwRNBgjWw7zfhPiDrWdS5Y/%3Fsize%3D512/https/cdn.discordapp.com/avatars/918297335258304522/f56e64e03c550615c2b5f714d0b1884f.png?format=webp&quality=lossless" alt="Truly Avatar">
+                    </div>
+                    <div class="person-name">Truly</div>
+                    <div class="person-role">Owner</div>
+                    <div class="person-username">@bblego4</div>
+                </div>
+
+                <div class="credit-card">
+                    <div class="avatar-frame">
+                        <img src="https://images-ext-1.discordapp.net/external/0TQYc8EsOWDIp9ZA1a7ZuQskoN1BCIiiwHKJwqqeHmI/%3Fsize%3D512/https/cdn.discordapp.com/avatars/926889740345679903/a_2cb92e0fe61cf965b984eadbd740fab8.gif" alt="Devin Avatar">
+                    </div>
+                    <div class="person-name">Devin</div>
+                    <div class="person-role">Co-Owner</div>
+                    <div class="person-username">@devin_920</div>
+                </div>
+
+                <div class="credit-card">
+                    <div class="avatar-frame">
+                        <img src="https://cdn.discordapp.com/attachments/1482464929654247634/1540997567331041290/image.png?ex=6a8bfd52&is=6a8aabd2&hm=cc80d8041beecdb3daee7a2abd55c91966e1e5ceeda3c112c4c1f473d4241af5&" alt="Zeph Avatar">
+                    </div>
+                    <div class="person-name">Zeph</div>
+                    <div class="person-role">Assistant Owner</div>
+                    <div class="person-username">@itszeph</div>
+                </div>
+
+                <div class="credit-card">
+                    <div class="avatar-frame">
+                        <img src="https://media.discordapp.net/attachments/1482464929654247634/1540998201447026758/image.png?ex=6a8bfde9&is=6a8aac69&hm=83fd120e22cae673770ca0eb863b7d49a14b9cedd41f137b42dd7c311b95a8e6&=&format=webp&quality=lossless&width=384&height=378" alt="Jack Avatar">
+                    </div>
+                    <div class="person-name">Jack</div>
+                    <div class="person-role">Community Manager</div>
+                    <div class="person-username">@itskingjackson</div>
+                </div>
+
+                <div class="credit-card">
+                    <div class="avatar-frame">
+                        <img src="https://images-ext-1.discordapp.net/external/68Ic8rBRx2xRTgsxULhMGH4db9RrPVs2Htb6aQDcBss/%3Fsize%3D512/https/cdn.discordapp.com/avatars/1422066925588058112/a_61e85a1844702cda4cc297ccdf6b8612.gif" alt="llucasxx Avatar">
+                    </div>
+                    <div class="person-name">llucasxx</div>
+                    <div class="person-role">Website Manager/Moderator</div>
+                    <div class="person-username">@llucasxxx</div>
+                </div>
+            </div>
+
+            <div class="credits-note">
+                " All members named in the credits have that contributed to this community since the start. North Redstone appreciates all of their moderators and contributors that supported the community from the start that are not named in credits."
+            </div>
+        </div>
+
+        <div id="adminpanel" class="page-section">
+            <h1 style="color: var(--text-white); margin-bottom: 1rem;">Administrator Panel</h1>
+            <!--
+                Deliberately empty. Previously this contained the full change-log
+                poster and guidelines editor markup, statically, all the time —
+                meaning a non-admin could reveal a fully-populated (if
+                non-functional) admin UI just by forcing this div's CSS class via
+                devtools. Now the actual form markup is only injected by
+                renderAdminPanel(), and only after a fresh, server-verified
+                isAdmin check. Force this section open without being an admin and
+                you get nothing but the message below.
+            -->
+            <div id="adminPanelContent">
+                <p class="subtle-note">Loading...</p>
+            </div>
+        </div>
+
     </div>
-  </main>
 
+    <div id="loadingOverlay" class="loading-overlay">
+        <div class="spinner"></div>
+        <div class="loading-text">Coming Soon! - Waiting for bblego4 for the application questions</div>
+    </div>
+
+    <div id="sessionToast" class="session-toast">
+        <strong id="sessionToastTitle">Session Notice</strong>
+        <span id="sessionToastMsg"></span>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 North Redstone Community. All rights reserved.</p>
+    </footer>
+
+    <script>
+
+        async function showSection(sectionId) {
+            if (sectionId === 'adminpanel') {
+                try {
+                    const res = await fetch('/api/session');
+                    currentSession = await res.json();
+                } catch (e) {
+                    currentSession = { loggedIn: false, isAdmin: false, username: null };
+                }
+
+                const adminNavLink = document.getElementById('adminNavLink');
+                adminNavLink.style.display = currentSession.isAdmin ? 'block' : 'none';
+
+                if (!currentSession.isAdmin) {
+                    sectionId = 'home';
+                } else {
+                    await renderAdminPanel();
+                }
+            }
+
+            const sections = document.querySelectorAll('.page-section');
+            sections.forEach(section => section.classList.remove('active'));
+            document.getElementById(sectionId).classList.add('active');
+            window.scrollTo(0, 0);
+        }
+
+        function showApplicationsLoading() {
+            const overlay = document.getElementById('loadingOverlay');
+            overlay.style.display = 'flex';
+            setTimeout(() => {
+                overlay.style.display = 'none';
+            }, 3000);
+        }
+
+        function escapeHtml(str) {
+            const div = document.createElement('div');
+            div.textContent = str == null ? '' : String(str);
+            return div.innerHTML;
+        }
+
+        let currentSession = { loggedIn: false, isAdmin: false, username: null };
+
+        // sleep helper used by the post-OAuth retry logic below
+        function sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
+        async function fetchSessionOnce() {
+            try {
+                const res = await fetch('/api/session', { cache: 'no-store' });
+                return await res.json();
+            } catch (e) {
+                return { loggedIn: false, isAdmin: false, username: null };
+            }
+        }
+
+        /*
+         * loadSession() drives the "Login with Discord" -> "Welcome to North
+         * Redstone, <username>" swap in the nav, plus the Administrator Panel
+         * link for admins. It reads from /api/session, which the backend is
+         * responsible for populating correctly after the Discord OAuth
+         * callback sets the session cookie.
+         *
+         * retryIfFresh: when true, if the very first check comes back
+         * logged-out we retry a few times with a short backoff. This covers
+         * the case where the browser has just been redirected back from
+         * Discord and the session cookie hasn't been picked up by the very
+         * first fetch yet (seen on some browsers right after a cross-site
+         * redirect). It does nothing once a session is confirmed either way
+         * beyond the first successful read.
+         */
+        async function loadSession(retryIfFresh = false) {
+            currentSession = await fetchSessionOnce();
+
+            if (retryIfFresh && !currentSession.loggedIn) {
+                const delays = [400, 800, 1500];
+                for (const delay of delays) {
+                    await sleep(delay);
+                    currentSession = await fetchSessionOnce();
+                    if (currentSession.loggedIn) break;
+                }
+            }
+
+            const accountArea = document.getElementById('accountArea');
+            const adminNavLink = document.getElementById('adminNavLink');
+
+            if (currentSession.loggedIn) {
+                accountArea.innerHTML = `
+                    <span class="welcome-text">Welcome to North Redstone, <span>${escapeHtml(currentSession.username)}</span></span>
+                    <a class="btn-logout" onclick="logout()">Logout</a>
+                `;
+                adminNavLink.style.display = currentSession.isAdmin ? 'block' : 'none';
+                startSessionWatcher(currentSession.expiresAt);
+            } else {
+                accountArea.innerHTML = `
+                    <a href="/auth/discord" class="btn-discord-login">
+                        <svg viewBox="0 0 640 512" xmlns="http://www.w3.org/2000/svg"><path d="M524.531,69.836a1.5,1.5,0,0,0-.764-.7A485.065,485.065,0,0,0,404.081,32.03a1.816,1.816,0,0,0-1.923.91,337.461,337.461,0,0,0-14.9,30.6,447.848,447.848,0,0,0-134.426,0,309.541,309.541,0,0,0-15.135-30.6,1.89,1.89,0,0,0-1.924-.91A483.689,483.689,0,0,0,116.085,69.137a1.712,1.712,0,0,0-.788.676C39.068,183.651,18.186,294.69,28.43,404.354a2.016,2.016,0,0,0,.765,1.375A487.666,487.666,0,0,0,176.02,479.918a1.9,1.9,0,0,0,2.063-.676A348.2,348.2,0,0,0,208.12,430.4a1.86,1.86,0,0,0-1.019-2.588,321.173,321.173,0,0,1-45.868-21.853,1.885,1.885,0,0,1-.185-3.126c3.082-2.309,6.166-4.711,9.109-7.137a1.819,1.819,0,0,1,1.9-.256c96.229,43.917,200.41,43.917,295.5,0a1.812,1.812,0,0,1,1.924.233c2.944,2.426,6.027,4.851,9.132,7.16a1.884,1.884,0,0,1-.162,3.126,301.407,301.407,0,0,1-45.89,21.83,1.875,1.875,0,0,0-1,2.611,391.055,391.055,0,0,0,30.014,48.815,1.864,1.864,0,0,0,2.063.7A486.048,486.048,0,0,0,610.7,405.729a1.882,1.882,0,0,0,.765-1.352C623.729,277.594,590.933,167.465,524.531,69.836ZM222.491,337.58c-28.972,0-52.844-26.587-52.844-59.239S193.056,219.1,222.491,219.1c29.665,0,53.306,26.82,52.843,59.239C275.334,310.993,251.924,337.58,222.491,337.58Zm195.38,0c-28.973,0-52.845-26.587-52.845-59.239S388.437,219.1,417.871,219.1c29.667,0,53.307,26.82,52.845,59.239C470.716,310.993,447.538,337.58,417.871,337.58Z"/></svg>
+                        Login with Discord
+                    </a>`;
+                adminNavLink.style.display = 'none';
+                clearSessionWatchers();
+            }
+        }
+
+        async function logout() {
+            await fetch('/auth/logout', { method: 'POST' });
+            clearSessionWatchers();
+            await loadSession();
+            showSection('home');
+        }
+
+        async function adminFetch(url, options) {
+            const res = await fetch(url, options);
+            if (res.status === 403) {
+                await loadSession();
+                if (!currentSession.isAdmin) {
+                    throw new Error('Your admin session expired (often caused by the server restarting, or 30 minutes of inactivity). Please log out and log back in with Discord, then try again.');
+                }
+            }
+            if (!res.ok) {
+                let message = 'Something went wrong.';
+                try { message = (await res.json()).error || message; } catch (e) { /* ignore */ }
+                throw new Error(message);
+            }
+            return res.json();
+        }
+
+        let sessionExpiresAt = null;
+        let heartbeatIntervalId = null;
+        let sessionWarnTimeoutId = null;
+        let sessionExpireTimeoutId = null;
+        let lastActivityAt = Date.now();
+
+        const ACTIVITY_EVENTS = ['mousemove', 'mousedown', 'keydown', 'scroll', 'touchstart'];
+        function recordActivity() { lastActivityAt = Date.now(); }
+        ACTIVITY_EVENTS.forEach(evt => window.addEventListener(evt, recordActivity, { passive: true }));
+
+        function showSessionToast(title, message, kind) {
+            const toast = document.getElementById('sessionToast');
+            document.getElementById('sessionToastTitle').textContent = title;
+            document.getElementById('sessionToastMsg').textContent = message;
+            toast.className = 'session-toast ' + kind;
+            toast.style.display = 'block';
+        }
+
+        function hideSessionToast() {
+            document.getElementById('sessionToast').style.display = 'none';
+        }
+
+        function clearSessionWatchers() {
+            if (heartbeatIntervalId) clearInterval(heartbeatIntervalId);
+            if (sessionWarnTimeoutId) clearTimeout(sessionWarnTimeoutId);
+            if (sessionExpireTimeoutId) clearTimeout(sessionExpireTimeoutId);
+            heartbeatIntervalId = null;
+            sessionWarnTimeoutId = null;
+            sessionExpireTimeoutId = null;
+            sessionExpiresAt = null;
+            hideSessionToast();
+        }
+
+        function scheduleSessionTimers() {
+            if (sessionWarnTimeoutId) clearTimeout(sessionWarnTimeoutId);
+            if (sessionExpireTimeoutId) clearTimeout(sessionExpireTimeoutId);
+            if (!sessionExpiresAt) return;
+
+            const msLeft = sessionExpiresAt - Date.now();
+            const warnMsBefore = 60 * 1000;
+            if (msLeft > warnMsBefore) {
+                sessionWarnTimeoutId = setTimeout(() => {
+                    showSessionToast('Heads up', 'Your session will expire in about a minute due to inactivity.', 'warning');
+                }, msLeft - warnMsBefore);
+            }
+
+            sessionExpireTimeoutId = setTimeout(handleSessionExpired, Math.max(msLeft, 0));
+        }
+
+        async function handleSessionExpired() {
+
+            let stillLoggedIn = false;
+            try {
+                const res = await fetch('/api/session');
+                const fresh = await res.json();
+                if (fresh.loggedIn) {
+                    stillLoggedIn = true;
+                    sessionExpiresAt = fresh.expiresAt;
+                    scheduleSessionTimers();
+                }
+            } catch (e) { /* fall through to logging out */ }
+
+            if (stillLoggedIn) return;
+
+            clearSessionWatchers();
+            await fetch('/auth/logout', { method: 'POST' }).catch(() => {});
+            currentSession = { loggedIn: false, isAdmin: false, username: null };
+            await loadSession();
+            showSection('home');
+            showSessionToast('Logged out', 'You were logged out after 30 minutes of inactivity.', 'expired');
+            setTimeout(hideSessionToast, 8000);
+        }
+
+        function startSessionWatcher(expiresAt) {
+            clearSessionWatchers();
+            if (!expiresAt) return;
+            sessionExpiresAt = expiresAt;
+            scheduleSessionTimers();
+
+            heartbeatIntervalId = setInterval(async () => {
+                if (Date.now() - lastActivityAt > 2 * 60 * 1000) return;
+                try {
+                    const res = await fetch('/api/heartbeat');
+                    if (res.ok) {
+                        const data = await res.json();
+                        if (data.loggedIn && data.expiresAt) {
+                            sessionExpiresAt = data.expiresAt;
+                            scheduleSessionTimers();
+                        }
+                    }
+                } catch (e) { /* ignore transient network errors */ }
+            }, 60 * 1000);
+        }
+
+        let changelogsCache = [];
+
+        async function loadChangelogs() {
+            try {
+                const res = await fetch('/api/changelogs');
+                changelogsCache = await res.json();
+            } catch (e) {
+                changelogsCache = [];
+            }
+            renderChangelogs();
+        }
+
+        function renderChangelogs() {
+            const sortOrder = document.getElementById('sortOrder').value;
+            const sorted = [...changelogsCache].sort((a, b) =>
+                sortOrder === 'newest' ? b.date.localeCompare(a.date) : a.date.localeCompare(b.date)
+            );
+
+            const wrapper = document.getElementById('logsWrapper');
+            if (sorted.length === 0) {
+                wrapper.innerHTML = '<p class="subtle-note">No change logs yet.</p>';
+                return;
+            }
+
+            wrapper.innerHTML = sorted.map(log => `
+                <div class="log-card">
+                    <div class="log-title-row">
+                        <span class="log-title">${escapeHtml(log.title)}</span>
+                        <span class="log-date">${escapeHtml(formatDate(log.date))}</span>
+                    </div>
+                    <div class="log-content">
+                        <ul>
+                            ${log.bullets.map(b => `<li>${escapeHtml(b)}</li>`).join('')}
+                        </ul>
+                    </div>
+                    ${log.note ? `<div class="log-note"><strong>Note:</strong> ${escapeHtml(log.note)}</div>` : ''}
+                    ${currentSession.isAdmin ? `
+                        <div class="log-admin-controls">
+                            <textarea id="note-${log.id}" placeholder="Add or edit a note for this update...">${escapeHtml(log.note || '')}</textarea>
+                            <div class="log-admin-buttons">
+                                <button class="btn-small save-note" onclick="saveChangelogNote('${log.id}')">Save Note</button>
+                                <button class="btn-small delete-log" onclick="deleteChangelog('${log.id}')">Delete Change Log</button>
+                            </div>
+                            <div id="logStatus-${log.id}" class="admin-status"></div>
+                        </div>
+                    ` : ''}
+                </div>
+            `).join('');
+        }
+
+        function formatDate(isoDate) {
+            const parts = isoDate.split('-');
+            if (parts.length !== 3) return isoDate;
+            const [y, m, d] = parts;
+            return `${parseInt(m)}/${parseInt(d)}/${y}`;
+        }
+
+        async function submitChangelog() {
+            const title = document.getElementById('clTitle').value.trim();
+            const date = document.getElementById('clDate').value;
+            const bullets = document.getElementById('clBullets').value
+                .split('\n')
+                .map(b => b.trim())
+                .filter(Boolean);
+            const note = document.getElementById('clNote').value.trim();
+            const statusEl = document.getElementById('clStatus');
+
+            if (!title || !date || bullets.length === 0) {
+                statusEl.textContent = 'Please fill in a title, date, and at least one bullet point.';
+                statusEl.className = 'admin-status error';
+                return;
+            }
+
+            try {
+                changelogsCache = await adminFetch('/api/changelogs', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ title, date, bullets, note }),
+                });
+                renderChangelogs();
+                statusEl.textContent = 'Change log posted!';
+                statusEl.className = 'admin-status success';
+                document.getElementById('clTitle').value = '';
+                document.getElementById('clBullets').value = '';
+                document.getElementById('clNote').value = '';
+            } catch (e) {
+                statusEl.textContent = e.message;
+                statusEl.className = 'admin-status error';
+            }
+        }
+
+        async function saveChangelogNote(id) {
+            const statusEl = document.getElementById(`logStatus-${id}`);
+            const note = document.getElementById(`note-${id}`).value.trim();
+            try {
+                changelogsCache = await adminFetch(`/api/changelogs/${id}`, {
+                    method: 'PATCH',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ note }),
+                });
+                renderChangelogs();
+            } catch (e) {
+                if (statusEl) {
+                    statusEl.textContent = e.message;
+                    statusEl.className = 'admin-status error';
+                } else {
+                    alert(e.message);
+                }
+            }
+        }
+
+        async function deleteChangelog(id) {
+            if (!confirm('Delete this change log entry? This cannot be undone.')) return;
+            try {
+                changelogsCache = await adminFetch(`/api/changelogs/${id}`, { method: 'DELETE' });
+                renderChangelogs();
+            } catch (e) {
+                alert(e.message);
+            }
+        }
+
+        let guidelinesCache = { game: [], discord: [] };
+
+        async function loadGuidelines() {
+            try {
+                const res = await fetch('/api/guidelines');
+                guidelinesCache = await res.json();
+            } catch (e) {
+                guidelinesCache = { game: [], discord: [] };
+            }
+            renderGuidelinesPublic('game', 'gameGuidelinesWrapper');
+            renderGuidelinesPublic('discord', 'discordGuidelinesWrapper');
+        }
+
+        function renderGuidelinesPublic(category, wrapperId) {
+            const wrapper = document.getElementById(wrapperId);
+            const rules = guidelinesCache[category] || [];
+            if (rules.length === 0) {
+                wrapper.innerHTML = '<p class="subtle-note">No guidelines have been posted yet.</p>';
+                return;
+            }
+            wrapper.innerHTML = rules.map((r, i) => `
+                <div class="rule-card">
+                    <p><strong>${i + 1}. ${escapeHtml(r.title)}</strong> ${escapeHtml(r.description)}</p>
+                </div>
+            `).join('');
+        }
+
+        let guidelinesDraft = { game: [], discord: [] };
+
+        async function renderAdminPanel() {
+            const container = document.getElementById('adminPanelContent');
+
+            if (!currentSession.isAdmin) {
+                container.innerHTML = '<div class="access-denied-box">You do not have access to this page.</div>';
+                return;
+            }
+
+            container.innerHTML = `
+                <div class="admin-banner">
+                    Changes made here are saved immediately and go live on the public site.
+                </div>
+                <div class="admin-panel-grid">
+                    <div class="admin-card">
+                        <h3>Add Game Change Log</h3>
+                        <label for="clTitle">Title</label>
+                        <input type="text" id="clTitle" placeholder="e.g. 1.2.5 UPDATE">
+
+                        <label for="clDate">Date</label>
+                        <input type="date" id="clDate">
+
+                        <label for="clBullets">Bullet points (one per line)</label>
+                        <textarea id="clBullets" placeholder="Added new feature&#10;Fixed a bug&#10;..."></textarea>
+
+                        <label for="clNote">Note (optional, shown on the public change log)</label>
+                        <textarea id="clNote" placeholder="e.g. This update will require a full re-download of the game files."></textarea>
+
+                        <button class="btn-admin" onclick="submitChangelog()">Post Change Log</button>
+                        <div id="clStatus" class="admin-status"></div>
+                    </div>
+
+                    <div class="admin-card">
+                        <h3>Community Guidelines Editor</h3>
+                        <p class="subtle-note">Edit, add, or remove rules below, then save each section.</p>
+
+                        <h4 style="margin-top: 1.2rem; color: var(--accent-yellow);">Game Guidelines</h4>
+                        <div id="gameGuidelinesEditor"></div>
+                        <button class="btn-admin secondary" onclick="addGuidelineRow('game')">+ Add Rule</button>
+                        <button class="btn-admin" onclick="saveGuidelines('game')">Save Game Guidelines</button>
+                        <div id="gameGuidelinesStatus" class="admin-status"></div>
+
+                        <h4 style="margin-top: 2rem; color: var(--accent-yellow);">Discord Guidelines</h4>
+                        <div id="discordGuidelinesEditor"></div>
+                        <button class="btn-admin secondary" onclick="addGuidelineRow('discord')">+ Add Rule</button>
+                        <button class="btn-admin" onclick="saveGuidelines('discord')">Save Discord Guidelines</button>
+                        <div id="discordGuidelinesStatus" class="admin-status"></div>
+                    </div>
+                </div>
+            `;
+
+            renderGuidelinesEditor('game');
+            renderGuidelinesEditor('discord');
+        }
+
+        function renderGuidelinesEditor(category) {
+            guidelinesDraft[category] = (guidelinesCache[category] || []).map(r => ({ ...r }));
+            drawGuidelineRows(category);
+        }
+
+        function drawGuidelineRows(category) {
+            const editorId = category === 'game' ? 'gameGuidelinesEditor' : 'discordGuidelinesEditor';
+            const editor = document.getElementById(editorId);
+            if (!editor) return;
+            const rows = guidelinesDraft[category];
+
+            editor.innerHTML = rows.map((r, i) => `
+                <div class="guideline-edit-row">
+                    <input type="text" value="${escapeHtml(r.title)}" placeholder="Rule title"
+                        oninput="updateGuidelineField('${category}', ${i}, 'title', this.value)">
+                    <textarea placeholder="Rule description"
+                        oninput="updateGuidelineField('${category}', ${i}, 'description', this.value)">${escapeHtml(r.description)}</textarea>
+                    <button class="btn-remove-row" onclick="removeGuidelineRow('${category}', ${i})">Remove</button>
+                </div>
+            `).join('');
+        }
+
+        function updateGuidelineField(category, index, field, value) {
+            guidelinesDraft[category][index][field] = value;
+        }
+
+        function addGuidelineRow(category) {
+            guidelinesDraft[category].push({ title: '', description: '' });
+            drawGuidelineRows(category);
+        }
+
+        function removeGuidelineRow(category, index) {
+            guidelinesDraft[category].splice(index, 1);
+            drawGuidelineRows(category);
+        }
+
+        async function saveGuidelines(category) {
+            const statusId = category === 'game' ? 'gameGuidelinesStatus' : 'discordGuidelinesStatus';
+            const statusEl = document.getElementById(statusId);
+            if (!statusEl) return;
+
+            const cleanedRows = guidelinesDraft[category].filter(r => r.title.trim());
+            const payload = {
+                game: category === 'game' ? cleanedRows : guidelinesCache.game,
+                discord: category === 'discord' ? cleanedRows : guidelinesCache.discord,
+            };
+
+            try {
+                guidelinesCache = await adminFetch('/api/guidelines', {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload),
+                });
+                renderGuidelinesPublic('game', 'gameGuidelinesWrapper');
+                renderGuidelinesPublic('discord', 'discordGuidelinesWrapper');
+                renderGuidelinesEditor(category);
+                statusEl.textContent = 'Saved!';
+                statusEl.className = 'admin-status success';
+            } catch (e) {
+                statusEl.textContent = e.message;
+                statusEl.className = 'admin-status error';
+            }
+        }
+
+        (async function init() {
+            const params = new URLSearchParams(window.location.search);
+            const cameFromDiscordRedirect =
+                document.referrer.includes('discord.com') ||
+                params.has('code') ||
+                params.get('login') === 'success';
+
+            await loadSession(cameFromDiscordRedirect);
+            await loadChangelogs();
+            await loadGuidelines();
+
+            if (params.get('login') === 'failed') {
+                alert('Discord login failed. Please try again.');
+            }
+
+            if (params.has('code') || params.has('login') || params.has('state')) {
+                const cleanUrl = window.location.pathname + window.location.hash;
+                window.history.replaceState({}, document.title, cleanUrl);
+            }
+        })();
+    </script>
 </body>
 </html>
