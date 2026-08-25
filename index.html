@@ -1177,22 +1177,6 @@
                 return { loggedIn: false, isAdmin: false, username: null };
             }
         }
-
-        /*
-         * loadSession() drives the "Login with Discord" -> "Welcome to North
-         * Redstone, <username>" swap in the nav, plus the Administrator Panel
-         * link for admins. It reads from /api/session, which the backend is
-         * responsible for populating correctly after the Discord OAuth
-         * callback sets the session cookie.
-         *
-         * retryIfFresh: when true, if the very first check comes back
-         * logged-out we retry a few times with a short backoff. This covers
-         * the case where the browser has just been redirected back from
-         * Discord and the session cookie hasn't been picked up by the very
-         * first fetch yet (seen on some browsers right after a cross-site
-         * redirect). It does nothing once a session is confirmed either way
-         * beyond the first successful read.
-         */
         async function loadSession(retryIfFresh = false) {
             currentSession = await fetchSessionOnce();
 
@@ -1234,12 +1218,13 @@
         }
 
         async function adminFetch(url, options) {
-            const res = await fetch(url, options);
+            let res = await fetch(url, options)
             if (res.status === 403) {
                 await loadSession();
                 if (!currentSession.isAdmin) {
                     throw new Error('Your admin session expired (often caused by the server restarting, or 30 minutes of inactivity). Please log out and log back in with Discord, then try again.');
                 }
+                res = await(url, options)
             }
             if (!res.ok) {
                 let message = 'Something went wrong.';
