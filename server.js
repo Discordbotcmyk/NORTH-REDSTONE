@@ -8,19 +8,12 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 const DATA_FILE = path.join(__dirname, 'data.json');
 
-// Pull environment variables with fallback defaults
 const DISCORD_CLIENT_ID = process.env.DISCORD_CLIENT_ID || process.env.CLIENT_ID;
 const DISCORD_CLIENT_SECRET = process.env.DISCORD_CLIENT_SECRET || process.env.CLIENT_SECRET;
 const SESSION_SECRET = process.env.SESSION_SECRET || 'change-me-in-.env';
 
-const ADMIN_USERNAMES = ['bblego4', 'llucasxxx', 'devin_920', 'itskingjackson', 'itszeph'].map(u => u.toLowerCase());
+const ADMIN_USERNAMES = ['bblego4', 'llucasxxx', 'devin_920', 'itskingjackson'].map(u => u.toLowerCase());
 
-// IMPORTANT: the app runs behind a reverse proxy (Render/Heroku/etc. — that's
-// why getRedirectUri() reads x-forwarded-proto/x-forwarded-host). Without this,
-// Express never sees the connection as HTTPS, so the "secure" session cookie
-// below silently fails to be set/read after the Discord OAuth redirect. That
-// was the cause of "login succeeds but the site still shows logged-out" —
-// the session cookie just wasn't sticking.
 app.set('trust proxy', 1);
 
 function ensureDataFile() {
@@ -64,10 +57,6 @@ app.use(
   })
 );
 
-// Serve only a dedicated public/ folder for static assets (CSS/JS/images you
-// add yourself later). Previously the whole project directory (__dirname) was
-// served statically, which meant server.js and data.json were publicly
-// downloadable at /server.js and /data.json. That's removed now.
 app.use(express.static(path.join(__dirname, 'public')));
 
 function isAdminUser(discordUser) {
@@ -148,7 +137,7 @@ app.get('/auth/discord/callback', async (req, res) => {
     // back on '/' and hit /api/session before the write finishes.
     req.session.save(err => {
       if (err) console.error('Session save error:', err);
-      res.redirect('/');
+      res.redirect('/?login=success');
     });
   } catch (err) {
     console.error('Discord OAuth error:', err);
@@ -164,7 +153,30 @@ app.post('/auth/logout', (req, res) => {
 app.get('/api/session', (req, res) => {
   if (!req.session.user) return res.json({ loggedIn: false });
   const { username, isAdmin } = req.session.user;
-  res.json({ loggedIn: true, username, isAdmin });
+  // req.session.cookie.expires is a Date once the cookie has a maxAge set
+  // (it does, above). The frontend's session watcher / inactivity-logout
+  // toast reads this as a timestamp — it was previously omitted here, which
+  // meant that logic silently never activated.
+  const expiresAt = req.session.cookie.expires
+    ? req.session.cookie.expires.getTime()
+    : Date.now() + (req.session.cookie.maxAge || 0);
+  res.json({ loggedIn: true, username, isAdmin, expiresAt });
+});
+
+// The frontend polls this every 60s (see startSessionWatcher) to keep the
+// session's inactivity clock alive while the tab is open and active. It was
+// missing entirely, so those pings were failing silently and doing nothing.
+app.get('/api/heartbeat', (req, res) => {
+  if (!req.session.user) return res.json({ loggedIn: false });
+  // Touch the session so express-session resets its rolling expiry.
+  req.session.touch();
+  req.session.save(err => {
+    if (err) console.error('Heartbeat session save error:', err);
+    const expiresAt = req.session.cookie.expires
+      ? req.session.cookie.expires.getTime()
+      : Date.now() + (req.session.cookie.maxAge || 0);
+    res.json({ loggedIn: true, expiresAt });
+  });
 });
 
 app.get('/api/changelogs', (req, res) => {
