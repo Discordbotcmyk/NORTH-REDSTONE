@@ -992,7 +992,7 @@
         <div id="guidelines" class="page-section">
 
             <div class="dmca-box">
-                <img src="https://cdn.discordapp.com/attachments/1482464929654247634/1540999953642692618/dmca-badge-w250-2x1-04.png?ex=6a8bff8b&is=6a8aae0b&hm=8db48655814a00aa6626fd4e4998e9c55de5692ac23293058369684c6f5577df&" alt="DMCA Badge" style="border-radius: 4px;">
+                <img src="https://cdn.discordapp.com/attachments/1482464929654247634/1541603874656362577/dmca-badge-w250-2x1-04.png?ex=6a8e31fd&is=6a8ce07d&hm=74a233cd114901594493b343de42f864100637047cd76ef853a2791609bdd282&" alt="DMCA Badge" style="border-radius: 4px;">
                 <div class="dmca-text">
                     <strong> All assets presiding to the game or assets presiding to North Redstone community is protected by DMCA (Digital Millennium Copyright Act of 1998). Attempting to steal assets or trying to replica a exact asset of NRC will result in a DMCA violation and may result in court proceedings.
                 </div>
@@ -1038,7 +1038,7 @@
 
                 <div class="credit-card">
                     <div class="avatar-frame">
-                        <img src="https://cdn.discordapp.com/attachments/1482464929654247634/1540997567331041290/image.png?ex=6a8bfd52&is=6a8aabd2&hm=cc80d8041beecdb3daee7a2abd55c91966e1e5ceeda3c112c4c1f473d4241af5&" alt="Zeph Avatar">
+                        <img src="https://cdn.discordapp.com/attachments/1482464929654247634/1541603591804944404/image.png?ex=6a8e31b9&is=6a8ce039&hm=fe816af6386c279897795dc5dca4dcc8e8b24c9644ca0ffc768862c7bc724911&" alt="Zeph Avatar">
                     </div>
                     <div class="person-name">Zeph</div>
                     <div class="person-role">Assistant Owner</div>
@@ -1047,7 +1047,7 @@
 
                 <div class="credit-card">
                     <div class="avatar-frame">
-                        <img src="https://media.discordapp.net/attachments/1482464929654247634/1540998201447026758/image.png?ex=6a8bfde9&is=6a8aac69&hm=83fd120e22cae673770ca0eb863b7d49a14b9cedd41f137b42dd7c311b95a8e6&=&format=webp&quality=lossless&width=384&height=378" alt="Jack Avatar">
+                        <img src="https://cdn.discordapp.com/attachments/1482464929654247634/1541603607684714517/image.png?ex=6a8e31bd&is=6a8ce03d&hm=89c4e4f019af10f01b4a452ed248c73d59730ebba25e3e10f9e4a7479e220a96&" alt="Jack Avatar">
                     </div>
                     <div class="person-name">Jack</div>
                     <div class="person-role">Community Manager</div>
@@ -1104,13 +1104,23 @@
 
     <script>
 
+
+        async function fetchSessionStrict() {
+            try {
+                const res = await fetch('/api/session', { cache: 'no-store' });
+                if (!res.ok) return null;
+                return await res.json();
+            } catch (e) {
+                return null;
+            }
+        }
+
         async function showSection(sectionId) {
             if (sectionId === 'adminpanel') {
-                try {
-                    const res = await fetch('/api/session');
-                    currentSession = await res.json();
-                } catch (e) {
-                    currentSession = { loggedIn: false, isAdmin: false, username: null };
+
+                const freshSession = await fetchSessionStrict();
+                if (freshSession) {
+                    currentSession = freshSession;
                 }
 
                 const adminNavLink = document.getElementById('adminNavLink');
@@ -1119,7 +1129,16 @@
                 if (!currentSession.isAdmin) {
                     sectionId = 'home';
                 } else {
-                    await renderAdminPanel();
+                    try {
+                        await renderAdminPanel();
+                    } catch (e) {
+
+                        console.error('Failed to render admin panel:', e);
+                        const container = document.getElementById('adminPanelContent');
+                        if (container) {
+                            container.innerHTML = '<div class="access-denied-box">Something went wrong loading the admin panel. Please refresh and try again.</div>';
+                        }
+                    }
                 }
             }
 
@@ -1145,7 +1164,7 @@
 
         let currentSession = { loggedIn: false, isAdmin: false, username: null };
 
-        // sleep helper used by the post-OAuth retry logic below
+
         function sleep(ms) {
             return new Promise(resolve => setTimeout(resolve, ms));
         }
@@ -1594,6 +1613,7 @@
 
         (async function init() {
             const params = new URLSearchParams(window.location.search);
+
             const cameFromDiscordRedirect =
                 document.referrer.includes('discord.com') ||
                 params.has('code') ||
@@ -1606,7 +1626,7 @@
             if (params.get('login') === 'failed') {
                 alert('Discord login failed. Please try again.');
             }
-
+            
             if (params.has('code') || params.has('login') || params.has('state')) {
                 const cleanUrl = window.location.pathname + window.location.hash;
                 window.history.replaceState({}, document.title, cleanUrl);
